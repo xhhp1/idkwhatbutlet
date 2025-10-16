@@ -549,10 +549,11 @@ function generateRoleRequest() {
 }
 
 function copyRoleRequest() {
-  const text = document.getElementById("role_output").textContent;
-  if (!text) return alert("لا يوجد نص لنسخه.");
-  navigator.clipboard.writeText(text);
-  alert("✅ تم نسخ القرار بنجاح!");
+  const text = document.getElementById("role_output").textContent.trim();
+  if (!text) return alert("⚠️ لا يوجد نص لنسخه.");
+  navigator.clipboard.writeText(text)
+    .then(() => alert("✅ تم نسخ القرار بنجاح!"))
+    .catch(() => alert("❌ حدث خطأ أثناء النسخ."));
 }
 
 /* --------- ADDED JS: templates & helper functions (exactly as you provided) --------- */
@@ -669,3 +670,4 @@ function copyTemplate() {
 </script>
 </body>
 </html>
+
