@@ -194,37 +194,43 @@
 </div>
 
 <!-- ================= RESIGNATION (الاستقالة) ================= -->
-<div id="resignBox" class="container">
-  <h2>📞نموذج الاستقالة📞</h2>
+<!-- ✅ استقالة TAB -->
+<div id="resignBox" class="box" style="display:none;">
+  <h2>📜 استقالة الفني 📜</h2>
 
-  <label>استقالة لمن ؟</label>
-  <select id="res_type" onchange="res_toggleLevel()">
+  <label>المستوى :</label>
+  <select id="res_type">
+    <option value="">-- اختر المستوى --</option>
     <option value="متدرب">مستوى متدرب</option>
     <option value="1">مستوى 1</option>
-    <option value="اعلى">مستوى اعلى من 2</option>
+    <option value="2">مستوى 2</option>
   </select>
 
-  <label>الكوبي ايدي</label>
-  <input type="number" id="res_copyId" placeholder="أدخل الكوبي ايدي">
+  <br><br>
 
-  <!-- ✅ New Box: الاسم و الكود -->
-  <label>الاسم و الكود</label>
-  <input type="text" id="res_nameCode" placeholder="أدخل الاسم و الكود الفني">
+  <label>👨‍🔧 الاسم و الكود :</label>
+  <input type="text" id="res_nameCode" placeholder="اكتب اسم و كود الفني">
 
-  <!-- ✅ New Box: الكوبي ايدي للمشرف -->
-  <label>الكوبي ايدي للمشرف</label>
-  <input type="number" id="res_superId" placeholder="أدخل الكوبي ايدي للمشرف">
+  <br><br>
 
-  <div id="res_levelBox" style="display:none">
-    <label>مستوى الفني</label>
-    <input type="number" id="res_levelNumber" placeholder="أدخل رقم المستوى">
-  </div>
+  <label>🧑‍💼 الكوبي ايدي للفني :</label>
+  <input type="text" id="res_copyId" placeholder="اكتب الكوبي ايدي للفني">
 
-  <div class="button-row">
-    <button class="btn" onclick="res_generate()">إنشاء الرسالة</button>
-    <button class="btn" onclick="res_copy()">📋 نسخ النتيجة</button>
-  </div>
-  <div id="res_output" class="output"></div>
+  <br><br>
+
+  <label>👨‍🏫 الكوبي ايدي للمشرف :</label>
+  <input type="text" id="res_superId" placeholder="اكتب الكوبي ايدي للمشرف">
+
+  <br><br>
+
+  <label>مستوى رقمي (للمستويات الأعلى من 1):</label>
+  <input type="number" id="res_levelNumber" placeholder="اكتب رقم المستوى (مثلاً 2 أو 3)" min="2" max="4">
+
+  <br><br>
+
+  <button onclick="res_generate()">📄 إنشاء القرار</button>
+
+  <pre id="res_output" style="display:none;white-space:pre-wrap;background:#f5f5f5;padding:15px;border-radius:10px;margin-top:20px;"></pre>
 </div>
 
 <!-- ================= VIOLATIONS (المخالفات) with fixed dropbox ================= -->
@@ -577,7 +583,6 @@ function vac_copyResult(){
 }
 
 /* ---------- RESIGNATION module (exact text preserved) ---------- */
-<script>
 function res_generate(){
   const type = document.getElementById('res_type').value;
   const copyId = document.getElementById('res_copyId').value.trim();
@@ -585,68 +590,52 @@ function res_generate(){
   const superId = document.getElementById('res_superId').value.trim();
   const levelNumber = document.getElementById('res_levelNumber').value.trim();
 
-  if(!copyId){ alert("⚠️ يرجى إدخال الكوبي ايدي"); return; }
+  if(!type){ alert("⚠️ يرجى اختيار المستوى"); return; }
+  if(!copyId){ alert("⚠️ يرجى إدخال الكوبي ايدي للفني"); return; }
   if(!nameCode){ alert("⚠️ يرجى إدخال الاسم و الكود"); return; }
   if(!superId){ alert("⚠️ يرجى إدخال الكوبي ايدي للمشرف"); return; }
 
-  let result = "";
+  let reasonText = "";
 
-  // الحالة الأولى: متدرب أو مستوى 1
-  if(type === "متدرب" || type === "1"){
-    let reasonText = (type === "متدرب")
-      ? "استقالة برتبة مستوى (متدرب)"
-      : "استقالة برتبة مستوى (1)";
+  if(type === "متدرب"){
+    reasonText = "استقالة برتبة مستوى (متدرب)";
+  } else if(type === "1"){
+    reasonText = "استقالة برتبة مستوى (1)";
+  } else {
+    if(!levelNumber){ alert("⚠️ يرجى إدخال رقم المستوى"); return; }
+    reasonText = `استقالة برتبة مستوى (${levelNumber})`;
+  }
 
-    result =
+  const result = 
 `*** ▬▬▬ ﷽ ▬▬
 \`\`\`diff
--الموضوع : قرار انهاء خدمات
+- الموضوع : قرار انهاء خدمات
 \`\`\`
 \`\`\`cs
 # بعد الاطلاع على نظام التوظيف والترقيات وانهاء الخدمة الصادر من ادارة الكراج قررنا مايلي 
 اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه
 ثانياً: منع توظيف 14 يوم
-ثالثاً:غرامه مالية قدرها 1,000,000 تسلم الى خزينة الكراج
+ثالثاً: غرامه مالية قدرها 1,000,000 تسلم الى خزينة الكراج
 \`\`\`
 
 <@${copyId}>
 ${nameCode}
 
-\`\`\`وذلك بسبب : ${reasonText} \`\`\`
+\`\`\`وذلك بسبب : ${reasonText}\`\`\`
 
-\`نوع السحب : \`  [فاتورة](رابط الفاتورة) 
+\`نوع السحب :\` [فاتورة](رابط الفاتورة)
 
 \`اعتماد:\` <@${superId}>
 
-\`توقيع مدير الخزينة: \`
-<@1182445629721563177> 
-<@&1071933343123386429> 
+\`توقيع مدير الخزينة:\`
+<@1182445629721563177>
+<@&1071933343123386429>
 
-يرسل الاصل الى : 
+يرسل الاصل الى :
 <@&1149742928953086105> ***`;
-  }
-
-  // الحالة الثانية: مستوى اعلى من 2
-  else {
-    if(!levelNumber){ alert("⚠️ يرجى إدخال رقم المستوى"); return; }
-    result =
-`*** ▬▬▬ ﷽ ▬▬
-\`\`\`diff
--الموضوع : قرار انهاء خدمات
-\`\`\`
-\`\`\`cs
-# بعد الاطلاع على نظام التوظيف والترقيات وانهاء الخدمة الصادر من ادارة الكراج قررنا مايلي 
-...
-\`\`\`
-<@${copyId}>
-${nameCode}
-المستوى: ${levelNumber}
-
-\`اعتماد:\` <@${superId}> ***`;
-  }
 
   const out = document.getElementById('res_output');
-  out.innerText = result;
+  out.textContent = result;
   out.style.display = 'block';
 }
 
@@ -799,6 +788,7 @@ show('vacBox');
 
 </body>
 </html>
+
 
 
 
