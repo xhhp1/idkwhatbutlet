@@ -5,72 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>نظام الفنيين</title>
 <style>
-  body {
-    font-family: "Tahoma", sans-serif;
-    background-color: #1e1e1e;
-    color: #fff;
-    padding: 30px;
-    text-align: center;
-  }
-
-  input[type=text] {
-    padding: 10px;
-    width: 300px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-    margin-right: 10px;
-  }
-
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    background-color: #8B0000;
-    color: #fff;
-  }
-
-  /* Modal Styles */
-  .modal {
-    display: none; 
-    position: fixed;
-    z-index: 100; 
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto;
-    background-color: rgba(0,0,0,0.8);
-  }
-
-  .modal-content {
-    background-color: #222;
-    margin: 10% auto; 
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; 
-    border-radius: 10px;
-    text-align: right;
-  }
-
-  .close {
-    color: #aaa;
-    float: left;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  pre {
-    text-align: right;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    background-color: #111;
-    padding: 10px;
-    border-radius: 5px;
-  }
+body { font-family: Tahoma; background:#1e1e1e; color:#fff; text-align:center; padding:30px; }
+input[type=text] { padding:10px; width:300px; font-size:16px; border-radius:5px; border:none; margin-right:10px; }
+button { padding:10px 20px; font-size:16px; border-radius:5px; border:none; cursor:pointer; background:#8B0000; color:#fff; }
+.modal { display:none; position:fixed; z-index:100; left:0; top:0; width:100%; height:100%; overflow:auto; background:rgba(0,0,0,0.8);}
+.modal-content { background:#222; margin:10% auto; padding:20px; border-radius:10px; width:80%; text-align:right; }
+.close { color:#aaa; float:left; font-size:28px; font-weight:bold; cursor:pointer; }
+pre { text-align:right; white-space:pre-wrap; word-wrap:break-word; background:#111; padding:10px; border-radius:5px;}
 </style>
 </head>
 <body>
@@ -79,7 +20,6 @@
 <input type="text" id="fieldCode" placeholder="الكود الخاص بالفني">
 <button onclick="searchCode()">بحث</button>
 
-<!-- Modal -->
 <div id="myModal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()">&times;</span>
@@ -88,95 +28,141 @@
 </div>
 
 <script>
-  // Example dataset simulating your Google Sheet
-  const data = [
-    {
-      code: "F001",
-      name: "علي",
-      copyId: "123456789",
-      headerText: "إجازة داخلية",
-      duration: 24,
-      balance: 120,
-      startDate: "2025-10-20",
-      endDate: "2025-10-22",
-      levelNumber: "متدرب & 1",
-      warningLevel: "1",
-      fineAmount: "1,000,000",
-      violation: "تأخير في العمل",
-      reason: "لم يحضر",
-      penalty: 5000,
-      warning: "نعم",
-      notPunished: "لا",
-      days: 5
-    },
-    {
-      code: "F002",
-      name: "أحمد",
-      copyId: "987654321",
-      headerText: "إجازة خارجية",
-      duration: 48,
-      balance: 100,
-      startDate: "2025-10-21",
-      endDate: "2025-10-25",
-      levelNumber: "متدرب & 2",
-      warningLevel: "2",
-      fineAmount: "500,000",
-      violation: "عدم الالتزام",
-      reason: "غياب بدون عذر",
-      penalty: 3000,
-      warning: "لا",
-      notPunished: "نعم",
-      days: 3
-    }
-  ];
+const scriptURL = "YOUR_SCRIPT_URL_HERE"; // Replace with your Apps Script URL
 
-  function searchCode() {
-    const code = document.getElementById("fieldCode").value.trim();
-    const person = data.find(p => p.code === code);
+function searchCode() {
+  const code = document.getElementById("fieldCode").value.trim();
+  if(!code){ alert("⚠️ يرجى إدخال الكود"); return; }
 
-    if (!person) {
-      alert("⚠️ لم يتم العثور على الكود");
-      return;
-    }
+  fetch(`${scriptURL}?code=${code}`)
+    .then(res => res.json())
+    .then(p => {
+      if(!p || Object.keys(p).length===0){ alert("⚠️ لم يتم العثور على الكود"); return; }
 
-    let result = `
-***\` إجازة داخلية \`***
+      let result = "";
 
-***\`${person.headerText} :\`***  <@${person.copyId}>
+      // --- إجازة داخلية ---
+      if(p["نوع النموذج"] === "إجازة داخلية"){
+        result = `***\` إجازة داخلية \`***\n
+***\`${p.headerText} :\`***  <@${p.copyId}>\n
+***\`المــــدة :\` ${p.duration} ساعة***  
+***\`الرصيد المتبقي :\` ${p.balance - p.duration} ساعة***  
+***من تاريخ ${p.startDate}***  
+***الى تاريخ ${p.endDate}***  
 
-***\`المــــدة :\` ${person.duration} ساعة***  
-***\`الرصيد المتبقي :\` ${person.balance - person.duration} ساعة***  
-***من تاريخ ${person.startDate}***  
-***الى تاريخ ${person.endDate}***  
+***\`ملاحظة :\`***  
+***تنتهي اجازتك بنفس التوقيت اللي بترجع فية .***  
 
-***\`ملاحظة :\`***
-تنتهي اجازتك بنفس التوقيت اللي بترجع فيه.
-
-***\`تنويهات هامة يجب قرائتها :\`***
+***\`تنويهات هامة يجب قرائتها :\`***  
 01/ تبدأ الإجازة الخاصة بك في وقتها المحدد...
 02/ يجب العودة من الإجازة قبل انتهاء مدتها...
 03/ عند وجود عذر سيتم تصفير الاجازات...
 04/ في حال تم سجنك رقابيا سيتم تطبيق العقوبه...
 05/ يمنع منعاً باتاً تغيير الاسم داخل المقاطعة...
-`;
+<@&1149742928953086105>`;
+      }
 
-    document.getElementById("modalText").innerText = result;
-    document.getElementById("myModal").style.display = "block";
-  }
+      // --- قرار انهاء خدمات ---
+      else if(p["نوع النموذج"] === "قرار انهاء خدمات"){
+        if(!p.levelNumber){
+          result = `*** ▬▬▬ ﷽ ▬▬
+\`\`\`diff
+-الموضوع : قرار انهاء خدمات
+\`\`\`
+\`\`\`cs
+# بعد الاطلاع على نظام التوظيف والترقيات وانهاء الخدمة الصادر من ادارة الكراج قررنا مايلي 
+اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه
+ثانياً: منع توظيف 14 يوم
+ثالثاً:غرامه مالية قدرها 1,000,000 تسلم الى خزينة الكراج
+\`\`\`
+<@${p.copyId}>
+اسم و كود الفني
+\`\`\`وذلك بسبب : استقالة برتبة مستوى (متدرب & 1) \`\`\`
+\`نوع السحب : \`  [فاتورة](رابط الفاتورة) 
+\`اعتماد:\` (منشن لنفسك)
+\`توقيع مدير الخزينة:\`
+<@1182445629721563177> 
+<@&1071933343123386429> 
+يرسل الاصل الى : 
+<@&1149742928953086105> ***`;
+        } else {
+          result = `*** ▬▬▬ ﷽ ▬▬
+\`\`\`diff
+-الموضوع : قرار انهاء خدمات
+\`\`\`
+\`\`\`cs
+# بعد الاطلاع على نظام التوظيف والترقيات وانهاء الخدمة الصادر من ادارة الكراج قررنا مايلي 
+اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه\`\`\`
+<@${p.copyId}>
+اسمه و كود الفني
+\`\`\`وذلك بسبب : استقالة برتبة مستوى (${p.levelNumber}) بناءاً على طلبه \`\`\`
+\`توقيع واعتماد:\`
+ (منشن لنفسك)
+\`يرسل الاصل الى : \`
+<@&1149742928953086105> ***`;
+        }
+      }
 
-  function closeModal() {
-    document.getElementById("myModal").style.display = "none";
-  }
+      // --- إنذار وظيفي ---
+      else if(p["نوع النموذج"] === "إنذار وظيفي"){
+        result = `*** ▬▬▬ ﷽ ▬▬
+\`\`\`diff
+-الموضوع : انذار وظيفي وغرامه مالية
+\`\`\`
+\`\`\`cs
+# بعد الاطلاع على نظام المخالفات والعقوبات الصادر من ادارة الكراج قررنا مايلي 
+اولاً: انذار وظيفي (${p.warningLevel})
+ثانياً: غرامه مالية قدرها ${p.fineAmount} تسلم الى خزينة الكراج
+\`\`\`
+<@${p.copyId}>
+\`\`\`وذلك بسبب : ${p.violation}\`\`\`
+\`نوع السحب : \`  [فاتورة](رابط الفاتورة) 
+\`اعتماد:\` (منشن لنفسك)
+\`توقيع مدير الخزينة \`
+<@1182445629721563177> 
+<@&1071933343123386429> 
+يرسل الاصل الى : 
+<@&1149742928953086105> ***`;
+      }
 
-  // Close modal if clicking outside
-  window.onclick = function(event) {
-    const modal = document.getElementById("myModal");
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
+      // --- نموذج استدعاء ---
+      else if(p["نوع النموذج"] === "نموذج استدعاء"){
+        result = `***\`  نموذج إستدعاء للفني الذي لم يحضر  \`***\n
+***\`اسم الفني\`***  <@${p.copyId}>
+***\`سبب الاستدعاء \`***   ${p.reason}
+***\`قيمة المخالفة\`*** ${Number(p.penalty).toLocaleString()}
+***\` الانذار المستحق ؟ : \`*** ${p.warning}
+***\`لم تتم مخالفته بسبب\`*** ${p.notPunished}
+***الي يجيه الفني يعلمه سبب المخالفة  وينزله المخالفة في روم
+https://ptb.discord.com/channels/1071933157097615480/1071934723858894868 ***  
+***نسخه الى***
+ <@&1071933357136556183>  - <@&1142626431101325403>`;
+      }
+
+      // --- إجازة خارجية ---
+      else if(p["نوع النموذج"] === "إجازة خارجية"){
+        result = `***\`  إجازة خارجية  \`***\n
+***\`الفني المحترم :\`***    <@${p.copyId}>         
+***\`المــــدة :\` ${p.days} يوم***  
+***من تاريخ ${p.startDate}***  
+*** الى تاريخ ${p.endDate}***  
+***\`ملاحظة :\`***
+***تنتهي اجازتك الخارجية في نفس يوم انتهاء الاجازة.***
+***\`تنويهات هامة يجب قرائتها :\`***
+01/ في حال بدت الاجازة يمنع منعا باتا دخولك للمقاطعة...
+02/ في حال انتهاء الاجازة او اردت قطعها يجب فتح تكت اجازة... 
+<@&1149742928953086105>`;
+      }
+
+      document.getElementById("modalText").innerText = result;
+      document.getElementById("myModal").style.display = "block";
+    })
+    .catch(err => alert("⚠️ حدث خطأ عند جلب البيانات"));
+}
+
+function closeModal(){ document.getElementById("myModal").style.display="none"; }
+window.onclick = function(event){ if(event.target==document.getElementById("myModal")) closeModal(); }
 </script>
 
 </body>
 </html>
-
