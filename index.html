@@ -199,12 +199,21 @@
 
   <label>استقالة لمن ؟</label>
   <select id="res_type" onchange="res_toggleLevel()">
-    <option value="متدرب">مستوى متدرب + 1</option>
+    <option value="متدرب">مستوى متدرب</option>
+    <option value="1">مستوى 1</option>
     <option value="اعلى">مستوى اعلى من 2</option>
   </select>
 
   <label>الكوبي ايدي</label>
   <input type="number" id="res_copyId" placeholder="أدخل الكوبي ايدي">
+
+  <!-- ✅ New Box: الاسم و الكود -->
+  <label>الاسم و الكود</label>
+  <input type="text" id="res_nameCode" placeholder="أدخل الاسم و الكود الفني">
+
+  <!-- ✅ New Box: الكوبي ايدي للمشرف -->
+  <label>الكوبي ايدي للمشرف</label>
+  <input type="number" id="res_superId" placeholder="أدخل الكوبي ايدي للمشرف">
 
   <div id="res_levelBox" style="display:none">
     <label>مستوى الفني</label>
@@ -572,14 +581,32 @@ function res_toggleLevel(){
   const t = document.getElementById('res_type').value;
   document.getElementById('res_levelBox').style.display = (t==='اعلى') ? 'block' : 'none';
 }
+
 function res_generate(){
   const type = document.getElementById('res_type').value;
   const copyId = document.getElementById('res_copyId').value.trim();
+  const nameCode = document.getElementById('res_nameCode').value.trim();
+  const superId = document.getElementById('res_superId').value.trim();
   const levelNumber = document.getElementById('res_levelNumber').value.trim();
-  if(!copyId){ alert("⚠️ يرجى إدخال الكوبي ايدي"); return; }
+
+  if(!copyId){ alert(⚠️ يرجى إدخال الكوبي ايدي"); return; }
+  if(!nameCode){ alert("⚠️ يرجى إدخال الاسم و الكود"); return; }
+  if(!superId){ alert("⚠️ يرجى إدخال الكوبي ايدي للمشرف"); return; }
 
   let result = "";
-  if(type === "متدرب"){
+
+  // الحالة الأولى: متدرب أو مستوى 1
+  if(type === "متدرب" || type === "1"){
+    let reasonText = "";
+
+    if(type === "متدرب"){
+      // حذف "& 1"
+      reasonText = "استقالة برتبة مستوى (متدرب)";
+    } else if(type === "1"){
+      // حذف "متدرب &"
+      reasonText = "استقالة برتبة مستوى (1)";
+    }
+
     result =
 `*** ▬▬▬ ﷽ ▬▬
 \`\`\`diff
@@ -595,13 +622,13 @@ function res_generate(){
 \`\`\`
 
 <@${copyId}>
-اسم و كود الفني
+${nameCode}
 
-\`\`\`وذلك بسبب : استقالة برتبة مستوى (متدرب & 1) \`\`\`
+\`\`\`وذلك بسبب : ${reasonText} \`\`\`
 
 \`نوع السحب : \`  [فاتورة](رابط الفاتورة) 
 
-\`اعتماد:\` (منشن لنفسك)
+\`اعتماد:\` <@${superId}>
 
 \`توقيع مدير الخزينة: \`
 <@1182445629721563177> 
@@ -609,7 +636,10 @@ function res_generate(){
 
 يرسل الاصل الى : 
 <@&1149742928953086105> ***`;
-  } else {
+  }
+
+  // الحالة الثانية: مستوى اعلى من 2
+  else {
     if(!levelNumber){ alert("⚠️ يرجى إدخال رقم المستوى"); return; }
     result =
 `*** ▬▬▬ ﷽ ▬▬
@@ -620,15 +650,16 @@ function res_generate(){
 \`\`\`cs
 # بعد الاطلاع على نظام التوظيف والترقيات وانهاء الخدمة الصادر من ادارة الكراج قررنا مايلي 
  
-اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه\`\`\`
+اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه
+\`\`\`
 
 <@${copyId}>
-اسمه و كود الفني
+${nameCode}
 
 \`\`\`وذلك بسبب : استقالة برتبة مستوى (${levelNumber}) بناءاً على طلبه \`\`\`
 
 \`توقيع واعتماد:\`
- (منشن لنفسك)
+<@${superId}>
 
 \`يرسل الاصل الى : \`
 <@&1149742928953086105> ***`;
@@ -638,6 +669,7 @@ function res_generate(){
   out.innerText = result;
   out.style.display = 'block';
 }
+
 function res_copy(){
   const out = document.getElementById('res_output');
   if(!out || !out.innerText.trim()){ alert("⚠️ لا يوجد نتيجة لنسخها"); return; }
@@ -793,4 +825,5 @@ show('vacBox');
 
 </body>
 </html>
+
 
