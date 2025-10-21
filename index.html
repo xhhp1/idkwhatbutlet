@@ -1,149 +1,640 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>🧱 المسميات الفنية 🧱</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>لوحة القيادة — توجيهات الميدان & التوظيف</title>
+
+<!-- Google font (Arabic-friendly) -->
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;900&display=swap" rel="stylesheet">
+
 <style>
-  body {
-    font-family: "Tahoma", sans-serif;
-    background-color: #0d0d0d;
-    color: white;
-    text-align: center;
+  :root{
+    --bg:#070708;
+    --panel:#0f0f10;
+    --muted:#bdb5a4;
+    --gold:#d6b64e;
+    --gold-strong:#e0c25a;
+    --glass: rgba(255,255,255,0.03);
+    --accent: rgba(214,182,78,0.12);
+    --radius: 12px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: 'Almarai', Tahoma, sans-serif;
+    background: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(8,8,8,1)) fixed;
+    color:#fff;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
     direction: rtl;
-    padding: 20px;
   }
 
-  h2 {
-    color: white;
-    margin: 20px 0 10px;
+  /* Top nav */
+  .topbar{
+    width:100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    padding:16px 22px;
+    display:flex;
+    align-items:center;
+    gap:20px;
   }
 
-  .top-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 20px;
+  .brand{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-left:auto;
+  }
+  .logo {
+    width:46px;
+    height:46px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(135deg, var(--gold-strong), var(--gold));
+    color:#111;
+    font-weight:900;
+    font-size:18px;
+    box-shadow: 0 6px 18px rgba(214,182,78,0.12), inset 0 -2px 6px rgba(0,0,0,0.25);
+  }
+  .title{
+    text-align:right;
+    line-height:1;
+  }
+  .title h1{ margin:0; font-size:16px; font-weight:700; color:var(--gold); }
+  .title p{ margin:0; font-size:12px; color:var(--muted); }
+
+  /* Nav buttons */
+  .nav {
+    display:flex;
+    gap:10px;
+    align-items:center;
+    border-radius:999px;
+    padding:6px;
+    background: rgba(255,255,255,0.01);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.6);
   }
 
-  input[type="text"] {
-    background: transparent;
-    border: 2px solid gold;
-    color: white;
-    font-size: 18px;
-    text-align: center;
-    padding: 8px 12px;
-    border-radius: 8px;
-    outline: none;
-    width: 140px;
+  .nav button{
+    border:0;
+    padding:10px 18px;
+    border-radius:10px;
+    background:transparent;
+    color:var(--muted);
+    font-weight:700;
+    cursor:pointer;
+    transition: all 220ms ease;
+    backdrop-filter: blur(4px);
+    position:relative;
+    font-size:14px;
+  }
+  .nav button:hover{ color: #fff; transform: translateY(-2px); }
+  .nav button.active{
+    color: #111;
+    background: linear-gradient(90deg, var(--gold), var(--gold-strong));
+    box-shadow: 0 8px 30px rgba(224,194,90,0.12);
   }
 
-  .button {
-    border: 2px solid gold;
-    color: white;
-    background: transparent;
-    font-size: 18px;
-    border-radius: 8px;
-    padding: 8px 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  /* container area */
+  .layout{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:22px;
+    padding:28px;
+    max-width:1150px;
+    margin:20px auto;
+    width:calc(100% - 40px);
   }
 
-  .button:hover {
-    background: gold;
-    color: black;
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.007));
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.03);
+    padding:18px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
   }
 
-  .note {
-    color: #ff3333;
-    font-size: 14px;
-    margin-top: 10px;
+  /* header inside card */
+  .card h1{
+    margin:0 0 6px 0;
+    font-size:20px;
+    color:var(--gold);
   }
+  .card h2{ margin:0 0 14px 0; font-size:14px; color:var(--muted); font-weight:400; }
 
-  .grid {
-    display: grid;
+  /* controls grid */
+  .controls{
+    display:grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
-    justify-items: center;
-    margin-top: 40px;
+    gap:12px;
+    align-items:start;
   }
 
-  .box {
-    width: 200px;
-    height: 200px;
-    border: 4px solid gold;
-    border-radius: 10px;
-    background-color: #fff;
-    background-image: url("https://raw.githubusercontent.com/xhhp1/mechanics/main/images/paper-texture.png");
-    background-size: cover;
-    background-position: center;
-    box-shadow: 0 0 10px rgba(255,215,0,0.3);
+  input[type="text"], select{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:2px solid rgba(255,255,255,0.04);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.18));
+    color:#fff;
+    outline:none;
+    font-size:15px;
+  }
+  input::placeholder{ color: rgba(255,255,255,0.45); }
+
+  label.inline{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    font-size:14px;
+    color:var(--muted);
+    cursor:pointer;
+  }
+  .small-note{ font-size:13px; color:var(--muted); margin-top:8px; }
+
+  .checkboxes{
+    display:flex;
+    gap:8px;
+    flex-direction:column;
+  }
+  .checkboxes label{ color:var(--muted); }
+
+  .generate{
+    display:inline-block;
+    padding:12px 18px;
+    border-radius:10px;
+    border:0;
+    cursor:pointer;
+    font-weight:800;
+    background: linear-gradient(90deg, var(--gold), var(--gold-strong));
+    color:#111;
+    box-shadow: 0 10px 30px rgba(224,194,90,0.10);
+    transition: transform 160ms ease;
+  }
+  .generate:active{ transform: translateY(2px); }
+
+  .copy-btn{
+    display:inline-block;
+    padding:10px 14px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.04);
+    background:transparent;
+    color:var(--muted);
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
   }
 
-  label {
-    display: block;
-    margin-top: 10px;
-    font-size: 18px;
+  .output{
+    margin-top:12px;
+    padding:12px;
+    border-radius:10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.22));
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    color:var(--muted);
+    font-weight:700;
+    word-break:break-word;
   }
 
-  .dropdown {
-    background: transparent;
-    border: 2px solid gold;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
-    padding: 8px;
-    margin-top: 15px;
+  /* Active/hidden containers */
+  .container { display:none; }
+  .container.active { display:block; }
+
+  /* footer small */
+  .footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin-top:6px;
   }
 
-  @media (max-width: 600px) {
-    input[type="text"], .button, .dropdown {
-      width: 90%;
-    }
+  /* responsive */
+  @media (max-width:820px){
+    .topbar{ padding:12px; gap:12px; }
+    .logo{ width:40px; height:40px; font-size:16px; }
+    .layout{ padding:16px; }
+  }
+  @media (max-width:540px){
+    .controls{ grid-template-columns: 1fr; }
+    .nav { gap:6px; }
+    .nav button{ padding:8px 12px; font-size:13px; }
   }
 </style>
 </head>
 <body>
 
-  <div class="top-section">
-    <input type="text" placeholder="اسمك">
-    <input type="text" placeholder="كودك">
-    <button class="button">المعتمد</button>
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand" style="margin-right:0;">
+      <div class="logo">TD</div>
+      <div class="title">
+        <h1>لوحة التوجيهات</h1>
+        <p>توجيهات الميدان — توجيهات التوظيف</p>
+      </div>
+    </div>
+
+    <div style="margin-left:auto"></div>
+
+    <!-- Navigation (two tabs) -->
+    <nav class="nav" aria-label="Main navigation">
+      <button id="fieldBtn" class="active">توجيهات الميدان</button>
+      <button id="jobBtn">توجيهات التوظيف</button>
+    </nav>
   </div>
 
-  <p class="note">✅ Check box to add (CD, CC, CB, CA)</p>
-  <p class="note">⬇️ Dropbox to select areas or operation roles.</p>
+  <!-- LAYOUT -->
+  <main class="layout">
 
-  <h2>المسمى الفني</h2>
+    <!-- Field Container -->
+    <section class="card container active" id="fieldContainer" aria-labelledby="fieldTitle">
+      <h1 id="fieldTitle">🛠 توجيهات الميدان</h1>
+      <h2>⚙️ اختصر اسمك الميداني واصنع التسمية بسرعة</h2>
 
-  <div class="grid">
-    <div>
-      <div class="box"></div>
-      <label>المسمى للمشرفين</label>
-    </div>
-    <div>
-      <div class="box"></div>
-      <label>مسميات وحدات التحكم</label>
-    </div>
-    <div>
-      <div class="box"></div>
-      <label>مسارات التعديل و التزويد</label>
-    </div>
-    <div>
-      <div class="box"></div>
-      <label><b>فني ميناء</b></label>
-    </div>
-  </div>
+      <div class="controls" style="margin-bottom:10px;">
+        <input type="text" id="nameInputField" placeholder="ادخل اسمك مثال (حمد بن عسكر)">
+        <input type="text" id="numberInputField" placeholder="كودك الميداني مثال (G-110)">
 
-  <select class="dropdown">
-    <option selected disabled>اختر المنطقة أو الدور</option>
-    <option>التحكم</option>
-    <option>التموين</option>
-    <option>الصيانة</option>
-    <option>الميدان</option>
-  </select>
+        <select id="rankSelect">
+          <option value="">اختر رتبتك</option>
+          <option value="فني">فني</option>
+          <option value="اشراف منطقه">اشراف منطقه</option>
+          <option value="اشراف منطقه متدرب">اشراف منطقه متدرب</option>
+          <option value="اشراف ميداني">اشراف ميداني</option>
+          <option value="اشراف عام">اشراف عام</option>
+          <option value="طوارئ وإنقاذ ">طوارئ وإنقاذ</option>
+        </select>
+
+        <select id="subRegion" style="display:none;">
+          <option value="">اختر توجيهك</option>
+          <option value="اشراف منطقة لوس">اشراف منطقة لوس</option>
+          <option value="اشراف منطقة ساندي">اشراف منطقة ساندي</option>
+          <option value="اشراف منطقة بوليتو">اشراف منطقة بوليتو</option>
+          <option value="اشراف منطقة بوليتو + ساندي">اشراف منطقة بوليتو + ساندي</option>
+        </select>
+
+        <select id="subRegionTrainee" style="display:none;">
+          <option value="">اختر توجيهك</option>
+          <option value="اشراف منطقة لوس متدرب">اشراف منطقة لوس متدرب</option>
+          <option value="اشراف منطقة ساندي متدرب">اشراف منطقة ساندي متدرب</option>
+          <option value="اشراف منطقة بوليتو متدرب">اشراف منطقة بوليتو متدرب</option>
+          <option value="اشراف منطقة بوليتو + ساندي متدرب">اشراف منطقة بوليتو + ساندي متدرب</option>
+        </select>
+
+        <select id="regionNames" style="display:none;">
+          <option value="">اختر اسم توجيهك</option>
+          <option value="لوس">لوس</option>
+          <option value="ساندي">ساندي</option>
+          <option value="بوليتو">بوليتو</option>
+          <option value="جزيرة">جزيرة</option>
+          <option value="العمليات">العمليات</option>
+          <option value="نائب العمليات">نائب العمليات</option>
+          <option value="مركز الاتصالات">مركز الاتصالات</option>
+        </select>
+      </div>
+
+      <div class="card" style="margin-top:8px; padding:12px;">
+        <div class="controls">
+          <label class="inline"><input type="checkbox" id="fleetToggle"> هل تريد إضافة خدمة الأسطول؟</label>
+          <select id="fleetBox" style="display:none;">
+            <option value="">اختر خدمة الاسطول</option>
+            <option value="اسطول لوس">اسطول لوس</option>
+            <option value="اسطول ساندي">اسطول ساندي</option>
+            <option value="اسطول بوليتو">اسطول بوليتو</option>
+            <option value="اسطول جزيرة">اسطول جزيرة</option>
+            <option value="اسطول متوسط لوس">اسطول متوسط لوس</option>
+            <option value="اسطول متوسط ساندي">اسطول متوسط ساندي</option>
+            <option value="اسطول متوسط بوليتو">اسطول متوسط بوليتو</option>
+            <option value="اسطول متوسط جزيرة">اسطول متوسط جزيرة</option>
+          </select>
+
+          <div class="checkboxes" style="grid-column: 1 / -1;">
+            <label class="inline"><input type="checkbox" id="minaTech"> فني ميناء</label>
+            <label class="inline"><input type="checkbox" id="masarat"> مسارات التعديل و التزويد</label>
+            <input type="text" id="masarInput" placeholder="اكتب رقم المسار فقط مثال (4)" style="display:none;">
+            <label class="inline"><input type="checkbox" id="controlUnit"> وحدة تحكم</label>
+            <select id="controlOptions" style="display:none;">
+              <option value="">اختر نوع وحدة التحكم</option>
+              <option value="فني مركز تحكم">فني مركز تحكم</option>
+              <option value="فني خدمات طرق">فني خدمات طرق</option>
+              <option value="مسؤول تحكم">مسؤول تحكم</option>
+            </select>
+
+            <label class="inline"><input type="checkbox" id="koodToggle"> كود المعتمد</label>
+            <select id="koodOptions" style="display:none;">
+              <option value="">اختر كود المعتمد</option>
+              <option value="CD">CD</option>
+              <option value="CC">CC</option>
+              <option value="CB">CB</option>
+            </select>
+          </div>
+
+          <div style="grid-column: 1 / -1; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <button class="generate" onclick="generateResult()">🗞 اضغط هنا لأظهار اسمك 🗞</button>
+            <button class="copy-btn" onclick="copyText('resultOutput')">🔗 اضغط هنا للنسخ 🔗</button>
+            <div class="output" id="resultOutput" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Job Container -->
+    <section class="card container" id="jobContainer" aria-labelledby="jobTitle">
+      <h1 id="jobTitle">📜 توجيهات التوظيف</h1>
+      <h2>📌 اختصر توجيهك في التوظيف بسرعة</h2>
+
+      <div class="controls">
+        <input type="text" id="nameInput" placeholder="ادخل اسمك مثال (حمد بن عسكر)">
+        <input type="text" id="numberInput" placeholder="كودك الميداني مثال (G-110)">
+      </div>
+
+      <label style="display:block; text-align:right; margin-top:10px; color:var(--muted)">اختار توجيهك حسب التقرير:</label>
+      <select id="roleSelect" style="margin-top:6px;">
+        <option value="">اختر توجيهك</option>
+        <option>نائب مدير قسم شؤون التوظيف</option>
+        <option>اشراف التوظيف</option>
+        <option>مسؤول المقابلة 1</option>
+        <option>مسؤول المقابلة 2</option>
+        <option>مسؤول المقابلة 3</option>
+        <option>مسؤول المقابلة 4</option>
+        <option>مسؤول المقابلة 5</option>
+        <option>نائب مسؤول مقابله 1</option>
+        <option>نائب مسؤول مقابله 2</option>
+        <option>نائب مسؤول مقابله 3</option>
+        <option>نائب مسؤول مقابله 4</option>
+        <option>نائب مسؤول مقابله 5</option>
+        <option>مسؤول تنظيم 1</option>
+        <option>مسؤول تنظيم 2</option>
+        <option>مسؤول تنظيم 3</option>
+        <option>مسؤول تنظيم 4</option>
+        <option>تنظيم 1</option>
+        <option>تنظيم 2</option>
+        <option>تنظيم 3</option>
+        <option>تنظيم 4</option>
+        <option>باص 1</option>
+        <option>باص 2</option>
+        <option>باص 3</option>
+        <option>باص 4</option>
+      </select>
+
+      <div style="margin-top:14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <button class="generate" onclick="generateNickname()">🗞 اضغط هنا لأظهار اسمك 🗞</button>
+        <button class="copy-btn" onclick="copyText('output')">🔗 اضغط هنا للنسخ 🔗</button>
+        <div class="output" id="output" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <p class="footer">نسخة محدثة — واجهة سوداء مع لمسات ذهبية · حفظ الملف كـ <code>dashboard.html</code> ثم افتحها بالمتصفح</p>
+  </main>
+
+<!-- JavaScript (merged/adapted) -->
+<script>
+/* --------------------------
+   Shared helpers
+   -------------------------- */
+function isValidSelection(val) {
+  return val && String(val).trim() !== "" && !String(val).trim().startsWith("اختر");
+}
+
+function copyText(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const text = el.innerText || el.textContent || "";
+  if (!text.trim()) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(()=> {
+      // small visual feedback
+      el.style.boxShadow = "0 6px 18px rgba(224,194,90,0.10)";
+      setTimeout(()=> el.style.boxShadow = "", 700);
+    }).catch(()=>{});
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch(e){}
+    ta.remove();
+  }
+}
+
+/* Bracket helpers */
+function parseBracketed(str){
+  if (!str) return null;
+  const m = /^\s*\[\s*([^\|\]\s]+)\s*\|\s*([^\]]*?)\s*\]\s*$/.exec(str);
+  if (!m) return null;
+  return { code: m[1], part: m[2] };
+}
+function makeBracketed(code, part){
+  return `[ ${code} | ${part} ]`;
+}
+function formatNumberPart(s){
+  const digits = String(s || "").replace(/[^0-9]/g, "");
+  return digits ? ("G-" + digits) : "";
+}
+
+/* --------------------------
+   Tab switching (2 tabs)
+   -------------------------- */
+(function setupTabs(){
+  const fieldBtn = document.getElementById("fieldBtn");
+  const jobBtn = document.getElementById("jobBtn");
+  const fieldContainer = document.getElementById("fieldContainer");
+  const jobContainer = document.getElementById("jobContainer");
+
+  function showField(){
+    fieldContainer.classList.add("active");
+    jobContainer.classList.remove("active");
+    fieldBtn.classList.add("active");
+    jobBtn.classList.remove("active");
+  }
+  function showJob(){
+    jobContainer.classList.add("active");
+    fieldContainer.classList.remove("active");
+    jobBtn.classList.add("active");
+    fieldBtn.classList.remove("active");
+  }
+
+  fieldBtn.addEventListener("click", showField);
+  jobBtn.addEventListener("click", showJob);
+})();
+
+/* --------------------------
+   Field & Job setup
+   -------------------------- */
+document.addEventListener("DOMContentLoaded", function () {
+  /* Field elements */
+  const rankSelect = document.getElementById("rankSelect");
+  const fleetToggle = document.getElementById("fleetToggle");
+  const fleetBox = document.getElementById("fleetBox");
+  const minaTech = document.getElementById("minaTech");
+  const masarat = document.getElementById("masarat");
+  const masarInput = document.getElementById("masarInput");
+  const controlUnit = document.getElementById("controlUnit");
+  const controlOptions = document.getElementById("controlOptions");
+  const koodToggle = document.getElementById("koodToggle");
+  const koodOptions = document.getElementById("koodOptions");
+  const numberField = document.getElementById("numberInputField");
+  const numberFieldJob = document.getElementById("numberInput");
+
+  /* Rank logic */
+  if (rankSelect) {
+    rankSelect.onchange = function () {
+      const v = this.value;
+      document.getElementById("subRegion").style.display = (v === "اشراف منطقه") ? "block" : "none";
+      document.getElementById("subRegionTrainee").style.display = (v === "اشراف منطقه متدرب") ? "block" : "none";
+      document.getElementById("regionNames").style.display = (v === "فني") ? "block" : "none";
+    };
+  }
+
+  /* Fleet toggle */
+  if (fleetToggle && fleetBox) {
+    fleetToggle.onchange = function () {
+      fleetBox.style.display = this.checked ? "block" : "none";
+    };
+    fleetBox.style.display = fleetToggle.checked ? "block" : "none";
+  }
+
+  /* MinaTech & Masarat mutual exclusion ONLY between themselves (not affecting kood) */
+  if (minaTech) {
+    minaTech.onchange = function () {
+      if (this.checked && masarat) {
+        masarat.checked = false;
+        if (masarInput) masarInput.style.display = "none";
+      }
+    };
+  }
+  if (masarat) {
+    masarat.onchange = function () {
+      if (masarInput) masarInput.style.display = this.checked ? "block" : "none";
+      if (this.checked && minaTech) minaTech.checked = false;
+    };
+    if (masarInput) masarInput.style.display = masarat.checked ? "block" : "none";
+  }
+
+  /* Control unit toggle */
+  if (controlUnit && controlOptions) {
+    controlUnit.onchange = function () {
+      controlOptions.style.display = this.checked ? "block" : "none";
+    };
+    controlOptions.style.display = controlUnit.checked ? "block" : "none";
+  }
+
+  /* Kood independent toggle */
+  if (koodToggle && koodOptions && numberField) {
+    koodToggle.onchange = function () {
+      koodOptions.style.display = this.checked ? "block" : "none";
+    };
+    koodOptions.onchange = function () {
+      const val = this.value;
+      if (!val) return;
+      const parsedNow = parseBracketed(numberField.value);
+      const rawPart = parsedNow ? parsedNow.part : numberField.value;
+      const formattedPart = formatNumberPart(rawPart) || "G-";
+      numberField.value = makeBracketed(val, formattedPart);
+    };
+    koodOptions.style.display = koodToggle.checked ? "block" : "none";
+  }
+
+  /* Format number fields */
+  function handleNumberFieldInput(el) {
+    const parsed = parseBracketed(el.value);
+    if (parsed) {
+      const afterPipe = el.value.replace(/^\s*\[\s*[^\|\]\s]+\s*\|\s*/,'').replace(/\s*\]\s*$/,'');
+      el.value = makeBracketed(parsed.code, formatNumberPart(afterPipe));
+    } else {
+      el.value = formatNumberPart(el.value);
+    }
+  }
+  if (numberField) {
+    numberField.oninput = function () { handleNumberFieldInput(this); };
+    numberField.onpaste = function () { setTimeout(()=>handleNumberFieldInput(this), 0); };
+  }
+  if (numberFieldJob) {
+    numberFieldJob.oninput = function () { this.value = formatNumberPart(this.value); };
+    numberFieldJob.onpaste = function () { setTimeout(()=> { numberFieldJob.value = formatNumberPart(numberFieldJob.value); }, 0); };
+  }
+});
+
+/* --------------------------
+   generateResult (field) & generateNickname (job)
+   -------------------------- */
+function generateResult() {
+  const name = (document.getElementById("nameInputField").value || "").trim();
+  const number = (document.getElementById("numberInputField").value || "").trim();
+  const rank = document.getElementById("rankSelect").value;
+  const subRegion = document.getElementById("subRegion").value;
+  const subRegionTrainee = document.getElementById("subRegionTrainee").value;
+  const regionName = document.getElementById("regionNames").value;
+  const fleetChecked = document.getElementById("fleetToggle").checked;
+  const fleetVal = document.getElementById("fleetBox").value;
+  const minaTechChecked = document.getElementById("minaTech").checked;
+  const masaratChecked = document.getElementById("masarat").checked;
+  const masarVal = (document.getElementById("masarInput").value || "").trim();
+  const controlChecked = document.getElementById("controlUnit").checked;
+  const controlVal = document.getElementById("controlOptions").value;
+  const koodChecked = document.getElementById("koodToggle").checked;
+  const koodVal = document.getElementById("koodOptions").value;
+
+  if (!name || !number) {
+    document.getElementById("resultOutput").innerText = "يرجى ملء الاسم والكود.";
+    return;
+  }
+
+  const parts = [];
+  if (!minaTechChecked && !masaratChecked) parts.push(name);
+  parts.push(number);
+
+  if (minaTechChecked) {
+    parts.push("فني ميناء");
+  } else if (masaratChecked && masarVal) {
+    parts.push("مسار " + masarVal);
+  } else {
+    if (isValidSelection(rank)) {
+      if (rank === "اشراف منطقه" && isValidSelection(subRegion)) {
+        parts.push(subRegion);
+      } else if (rank === "اشراف منطقه متدرب" && isValidSelection(subRegionTrainee)) {
+        parts.push(subRegionTrainee);
+      } else if (rank === "فني" && isValidSelection(regionName)) {
+        parts.push(regionName);
+      } else if (rank !== "فني") {
+        parts.push(rank);
+      }
+    }
+    if (fleetChecked && isValidSelection(fleetVal)) parts.push(fleetVal);
+    if (controlChecked && isValidSelection(controlVal)) parts.push(controlVal);
+  }
+
+  // Kood is independent
+  if (koodChecked && isValidSelection(koodVal)) {
+    const parsedNumber = parseBracketed(number);
+    if (!(parsedNumber && parsedNumber.code === koodVal)) {
+      parts.push("كود " + koodVal);
+    }
+  }
+
+  document.getElementById("resultOutput").innerText = parts.join(" | ");
+}
+
+function generateNickname() {
+  const name = (document.getElementById("nameInput").value || "").trim();
+  const number = (document.getElementById("numberInput").value || "").trim();
+  const role = document.getElementById("roleSelect").value;
+
+  if (!name || !number || !isValidSelection(role)) {
+    document.getElementById("output").innerText = "يرجى ملء جميع الحقول.";
+    return;
+  }
+
+  document.getElementById("output").innerText = [name, number, role].join(" | ");
+}
+</script>
 
 </body>
 </html>
