@@ -577,11 +577,7 @@ function vac_copyResult(){
 }
 
 /* ---------- RESIGNATION module (exact text preserved) ---------- */
-function res_toggleLevel(){
-  const t = document.getElementById('res_type').value;
-  document.getElementById('res_levelBox').style.display = (t==='اعلى') ? 'block' : 'none';
-}
-
+<script>
 function res_generate(){
   const type = document.getElementById('res_type').value;
   const copyId = document.getElementById('res_copyId').value.trim();
@@ -589,7 +585,7 @@ function res_generate(){
   const superId = document.getElementById('res_superId').value.trim();
   const levelNumber = document.getElementById('res_levelNumber').value.trim();
 
-  if(!copyId){ alert(⚠️ يرجى إدخال الكوبي ايدي"); return; }
+  if(!copyId){ alert("⚠️ يرجى إدخال الكوبي ايدي"); return; }
   if(!nameCode){ alert("⚠️ يرجى إدخال الاسم و الكود"); return; }
   if(!superId){ alert("⚠️ يرجى إدخال الكوبي ايدي للمشرف"); return; }
 
@@ -597,25 +593,17 @@ function res_generate(){
 
   // الحالة الأولى: متدرب أو مستوى 1
   if(type === "متدرب" || type === "1"){
-    let reasonText = "";
-
-    if(type === "متدرب"){
-      // حذف "& 1"
-      reasonText = "استقالة برتبة مستوى (متدرب)";
-    } else if(type === "1"){
-      // حذف "متدرب &"
-      reasonText = "استقالة برتبة مستوى (1)";
-    }
+    let reasonText = (type === "متدرب")
+      ? "استقالة برتبة مستوى (متدرب)"
+      : "استقالة برتبة مستوى (1)";
 
     result =
 `*** ▬▬▬ ﷽ ▬▬
 \`\`\`diff
-
 -الموضوع : قرار انهاء خدمات
 \`\`\`
 \`\`\`cs
 # بعد الاطلاع على نظام التوظيف والترقيات وانهاء الخدمة الصادر من ادارة الكراج قررنا مايلي 
- 
 اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه
 ثانياً: منع توظيف 14 يوم
 ثالثاً:غرامه مالية قدرها 1,000,000 تسلم الى خزينة الكراج
@@ -644,36 +632,22 @@ ${nameCode}
     result =
 `*** ▬▬▬ ﷽ ▬▬
 \`\`\`diff
-
 -الموضوع : قرار انهاء خدمات
 \`\`\`
 \`\`\`cs
 # بعد الاطلاع على نظام التوظيف والترقيات وانهاء الخدمة الصادر من ادارة الكراج قررنا مايلي 
- 
-اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه
+...
 \`\`\`
-
 <@${copyId}>
 ${nameCode}
+المستوى: ${levelNumber}
 
-\`\`\`وذلك بسبب : استقالة برتبة مستوى (${levelNumber}) بناءاً على طلبه \`\`\`
-
-\`توقيع واعتماد:\`
-<@${superId}>
-
-\`يرسل الاصل الى : \`
-<@&1149742928953086105> ***`;
+\`اعتماد:\` <@${superId}> ***`;
   }
 
   const out = document.getElementById('res_output');
   out.innerText = result;
   out.style.display = 'block';
-}
-
-function res_copy(){
-  const out = document.getElementById('res_output');
-  if(!out || !out.innerText.trim()){ alert("⚠️ لا يوجد نتيجة لنسخها"); return; }
-  navigator.clipboard.writeText(out.innerText).then(()=>alert("✅ تم النسخ"));
 }
 
 /* ---------- VIOLATIONS (المخالفات) module using custom dropdown ---------- */
@@ -825,5 +799,6 @@ show('vacBox');
 
 </body>
 </html>
+
 
 
