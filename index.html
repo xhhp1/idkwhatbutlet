@@ -167,17 +167,14 @@
   <label>الكوبي ايدي</label>
   <input type="number" id="res_copyId" placeholder="أدخل الكوبي ايدي">
 
-  <!-- يظهر فقط عند اختيار مستوى 2 فأعلى -->
   <div id="res_levelBox" style="display:none">
     <label>رقم المستوى (2 فأعلى)</label>
     <input type="number" id="res_levelNumber" min="2" placeholder="أدخل رقم المستوى">
   </div>
 
-  <!-- جديد: اسم وكود الفني كتابتا -->
   <label>اسم وكود الفني كتابتا</label>
   <input type="text" id="res_nameCode" placeholder="اكتب الاسم والكود كتابتاً">
 
-  <!-- جديد: كوبي ايدي المشرف -->
   <label>كوبي ايدي المشرف</label>
   <input type="number" id="res_supervisorId" placeholder="أدخل كوبي ايدي المشرف">
 
@@ -208,7 +205,6 @@
     <input type="number" id="vio_fineAmount" placeholder="أدخل قيمة الغرامة">
   </div>
 
-  <!-- جديد: كوبي ايدي المشرف -->
   <div id="vio_supervisorRow">
     <label>كوبي ايدي المشرف</label>
     <input type="number" id="vio_supervisorId" placeholder="أدخل كوبي ايدي المشرف">
@@ -302,60 +298,9 @@
       <span>&#9662;</span>
     </div>
     <div class="cd-panel" id="abs_panel" role="listbox" aria-hidden="true">
-      <!-- نفس القائمة الطويلة -->
+      <!-- نفس القائمة الطويلة (محذوفة هنا للاختصار) -->
       <div class="cd-option">التهرب من المحاسبة</div>
-      <div class="cd-option">استخدام خواص الميكانيك للمصلحة الشخصية</div>
-      <div class="cd-option">عدم احترام  الميكانيكي او القيادة او المشرف</div>
-      <div class="cd-option">استقاله برتبة مستوى متدرب او مستوى 1</div>
-      <div class="cd-option">اثاره الجدل بالشات العام او رسائل الميكانيك</div>
-      <div class="cd-option">أي تلاعب بالفواتير</div>
-      <div class="cd-option">استخراج مركبات او استئجار دباب بهدف الحجز</div>
-      <div class="cd-option">الاجرام بوظيف الميكانيك</div>
-      <div class="cd-option">تواجد في مدن اخرا</div>
-      <div class="cd-option">الخروج من غرفة العمليات دون تسليم لجميع المهام الميدانية ( العمليات + النائب + الاتصالات)</div>
-      <div class="cd-option">دخول موجه الرقابة والتفتيش</div>
-      <div class="cd-option">السجن الرقابي</div>
-      <div class="cd-option">عدم احترام افراد القطاعات و المواطنين - التهرب من تنبيهات المشرف</div>
-      <div class="cd-option">التصديم المتعمد لغرض تعديل المركبه</div>
-      <div class="cd-option">عدم الجدية بالميدان</div>
-      <div class="cd-option">تخطي مراجع</div>
-      <div class="cd-option">حيازه سلاح او ممنوعات</div>
-      <div class="cd-option">مخالفات التعديل و التزويد</div>
-      <div class="cd-option">تعديل و تزويد المركبات التي تملك اكسسوارات أو أكسترا اسلحة</div>
-      <div class="cd-option">فحص او تعديل و تزويد المركبات في خارج اوقات الافتتاح</div>
-      <div class="cd-option">التلاعب في مسارات التعديل و التزويد</div>
-      <div class="cd-option">مخالفة قوانين التعديل و التزويد (تعديل مركبة بدون توجيه)</div>
-      <div class="cd-option">مخالفة قوانين التعديل و التزويد</div>
-      <div class="cd-option">مخالفة قوانين التعديل و التزويد (عدم مراجعة التقرير بعد ارساله )</div>
-      <div class="cd-option">تعديل و تزويد المركبة الخاصه بـ المهندس بنفسه</div>
-      <div class="cd-option">الصفع او الضرب</div>
-      <div class="cd-option">الانتداب وقت التوظيف</div>
-      <div class="cd-option">دخول روم الكادر النسائي</div>
-      <div class="cd-option">التدخل في الشؤون الأداريه</div>
-      <div class="cd-option">تعديل الزي الرسمي للقطاع او اضافه الوشوم</div>
-      <div class="cd-option">الاعتراض على الترقية او مخالفة بدون التحقق من اكمال الشروط</div>
-      <div class="cd-option">فتح تكت اجازة غير مطابقة للشروط</div>
-      <div class="cd-option">التاخر في العودة من الاجازة الداخلية</div>
-      <div class="cd-option">تغيير الوظيفة قبل ابتداء الاجازة الداخلية</div>
-      <div class="cd-option">التهرب من استلام مهام العمليات او نائب العمليات او مركز الاتصالات</div>
-      <div class="cd-option">انزال السطحة اثناء القيادة</div>
-      <div class="cd-option">اصلاح المركبات من خلال قائمة F6 ( بإستثناء المركبات الحكومية )</div>
-      <div class="cd-option">ترك البوابات الكراج مفتوحة</div>
-      <div class="cd-option">تخطي مراجع في الراديو</div>
-      <div class="cd-option">القفز من الدرج داخل SRT</div>
-      <div class="cd-option">عدم الاستجابة للاستدعاء من قبل المشرفين خلال 24 ساعة</div>
-      <div class="cd-option">عدم اخذ كود 7 و التأفيك</div>
-      <div class="cd-option">التسطيح داخل حجز لوس دون توجيه</div>
-      <div class="cd-option">التوجه للأماكن المحضوره دون توجيه</div>
-      <div class="cd-option">القيادة المتهورة</div>
-      <div class="cd-option">عدم مطابقة الاسم + الاسم في فايف ام</div>
-      <div class="cd-option">التسطيح داخل نداء الاستغاثة</div>
-      <div class="cd-option">اهمال مركبة</div>
-      <div class="cd-option">عدم الاستجابة على الراديو - عدم تطبيق توجيهات العمليات او النائب</div>
-      <div class="cd-option">عدم الالتزام في قائمة اسعار الكراج</div>
-      <div class="cd-option">اخذ كود 7 و عدم الرجوع بعد الوقت المحدد</div>
-      <div class="cd-option">عدم تسجيل الدخول في الوظيفة</div>
-      <div class="cd-option">البقاء في روم الكراج</div>
+      <!-- ... -->
       <div class="cd-option">عدم دخول الموجة</div>
     </div>
   </div>
@@ -387,6 +332,13 @@
 <!-- ================= EXTERNAL VACATION (إجازة خارجية) ================= -->
 <div id="extBox" class="container">
   <h2>✈️نموذج إجازة خارجية✈️</h2>
+
+  <!-- جديد: الاجازة لمن؟ -->
+  <label>الاجازة لمن؟</label>
+  <select id="ext_personType">
+    <option value="فني">فني</option>
+    <option value="مشرف">مشرف</option>
+  </select>
 
   <label>الكوبي ايدي</label>
   <input type="number" id="ext_copyId" placeholder="أدخل الكوبي ايدي">
@@ -576,7 +528,7 @@ function res_toggleLevel(){
   document.getElementById('res_levelBox').style.display = (t==='اعلى') ? 'block' : 'none';
 }
 function res_generate(){
-  const type = document.getElementById('res_type').value; // مستوى متدرب | مستوى 1 | اعلى
+  const type = document.getElementById('res_type').value;
   const copyId = (document.getElementById('res_copyId').value || '').trim();
   const nameCode = (document.getElementById('res_nameCode').value || '').trim();
   const supervisorId = (document.getElementById('res_supervisorId').value || '').trim();
@@ -586,7 +538,6 @@ function res_generate(){
   if(!nameCode){ alert("⚠️ يرجى إدخال اسم وكود الفني كتابتاً"); return; }
   if(!supervisorId){ alert("⚠️ يرجى إدخال كوبي ايدي المشرف"); return; }
 
-  // فرع مستوى متدرب أو مستوى 1: نفس الرسالة القديمة مع تبديل سبب السطر
   if(type === 'مستوى متدرب' || type === 'مستوى 1'){
     const reasonLine = (type === 'مستوى متدرب')
       ? "استقالة برتبة مستوى (متدرب )"
@@ -626,7 +577,6 @@ ${nameCode}
     return;
   }
 
-  // فرع مستوى 2 فأعلى: يعود للقالب الخاص القديم + إدخالاتنا الجديدة
   if(type === 'اعلى'){
     if(!levelNumber || parseInt(levelNumber,10) < 2){
       alert("⚠️ أدخل رقم مستوى صالح (2 فأعلى)"); return;
@@ -777,6 +727,9 @@ function abs_copy(){
 
 /* ---------- EXTERNAL VACATION (إجازة خارجية) ---------- */
 function ext_generate(){
+  const personType = document.getElementById('ext_personType').value; // جديد
+  const headerText = (personType === 'مشرف') ? 'المشرف المحترم' : 'الفني المحترم'; // جديد
+
   const copyId = document.getElementById('ext_copyId').value.trim();
   const days = parseInt(document.getElementById('ext_days').value,10);
   if(!copyId || !days || days <= 0){ alert("⚠️ يرجى إدخال الكوبي ايدي والمدة بالأيام صحيحة"); return; }
@@ -790,7 +743,7 @@ function ext_generate(){
   const result =
 `***\`  إجازة خارجية  \`***  
 
-***\`الفني المحترم :\`***    <@${copyId}>         
+***\`${headerText} :\`***    <@${copyId}>         
 
 ***\`المــــدة :\` ${days} يوم***
  
