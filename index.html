@@ -364,17 +364,15 @@ function updateExtForm(){
   const type=document.getElementById('ext_leaveType').value;
   const daysField = document.getElementById('ext_leaveDaysField');
   const extField  = document.getElementById('ext_extensionField');
-  const copyInput = document.getElementById('ext_copyUser');
 
   // default hide/show
   daysField.style.display   = (type==='اجازة خارجية') ? 'block' : 'none';
   extField.style.display    = (type==='تمديد اجازة خارجية') ? 'block' : 'none';
 
-  // ★ For "انتهاء اجازة خارجية": hide all extra fields and prefill copy box
+  // For "انتهاء اجازة خارجية": hide extra fields (leave copy input as-is)
   if (type === 'انتهاء اجازة خارجية') {
     daysField.style.display = 'none';
     extField.style.display  = 'none';
-    copyInput.value = ''; // auto-fill as requested
   }
 }
 function formatExtDate(date){
@@ -388,12 +386,13 @@ function generateExternalLeave(){
   if(!type) return alert('⚠️ الرجاء اختيار نوع الإجازة');
 
   let copyUser=document.getElementById("ext_copyUser").value.trim();
+  if(!copyUser) return alert('⚠️ الرجاء إدخال الكوبي ايدي');
+  if(!copyUser.startsWith('<@')) copyUser=`<@${copyUser}>`;
 
-  // --- Branch: انتهاء اجازة خارجية (special template & ignore user input) ---
+  let tzDate=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Riyadh"}));
+
+  // --- انتهاء اجازة خارجية ---
   if (type === 'انتهاء اجازة خارجية') {
-    // Always replace whatever is typed with literal
-    copyUser='';
-
     const message=`**﷽
 
 قرار صـادر مـن <@&1071933369698496532 > 
@@ -413,12 +412,7 @@ function generateExternalLeave(){
     return;
   }
 
-  // for the other two types, require a copy id
-  if(!copyUser) return alert('⚠️ الرجاء إدخال الكوبي ايدي');
-  if(!copyUser.startsWith('<@')) copyUser=`<@${copyUser}>`;
-
-  let tzDate=new Date(new Date().toLocaleString("en-US",{timeZone:"Asia/Riyadh"}));
-
+  // --- اجازة خارجية ---
   if(type==='اجازة خارجية'){
     const leaveDays=parseInt(document.getElementById('ext_leaveDays').value);
     if(!leaveDays||leaveDays<=0) return alert('⚠️ الرجاء إدخال مدة الإجازة بالأيام صحيحة');
@@ -450,6 +444,7 @@ function generateExternalLeave(){
     return;
   }
 
+  // --- تمديد اجازة خارجية ---
   if(type==='تمديد اجازة خارجية'){
     const prevEndStr=document.getElementById('ext_previousEndDate').value;
     const extensionDays=parseInt(document.getElementById('ext_extensionDays').value);
@@ -671,4 +666,3 @@ function copyTemplate() {
 </script>
 </body>
 </html>
-
