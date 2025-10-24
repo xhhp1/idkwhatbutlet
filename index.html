@@ -374,7 +374,7 @@ function updateExtForm(){
   if (type === 'انتهاء اجازة خارجية') {
     daysField.style.display = 'none';
     extField.style.display  = 'none';
-    copyInput.value = '@.............'; // auto-fill as requested
+    copyInput.value = ''; // auto-fill as requested
   }
 }
 function formatExtDate(date){
@@ -391,8 +391,8 @@ function generateExternalLeave(){
 
   // --- Branch: انتهاء اجازة خارجية (special template & ignore user input) ---
   if (type === 'انتهاء اجازة خارجية') {
-    // Always replace whatever is typed with literal @.............
-    copyUser='@.............';
+    // Always replace whatever is typed with literal
+    copyUser='';
 
     const message=`**﷽
 
@@ -671,3 +671,4 @@ function copyTemplate() {
 </script>
 </body>
 </html>
+
