@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>💼الشؤون الإدارية💼</title>
 <style>
-  /* --- Theme --- */
   :root{
     --gold:#e0ca51;
     --bg:#222;
@@ -22,58 +21,27 @@
     padding:20px;
     box-sizing:border-box;
   }
-
   h1{ margin:12px 0 18px; font-size:28px; }
-
-  /* --- Menu buttons (big) --- */
   .menu{
-    display:flex;
-    gap:18px;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-bottom:18px;
+    display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom:18px;
   }
   .menu button{
-    padding:18px 36px;
-    font-size:20px;
-    background:var(--gold);
-    color:#111;
-    border:none;
-    border-radius:12px;
-    font-weight:bold;
-    cursor:pointer;
-    transition: transform .12s ease, background .12s ease;
-    min-width:190px;
+    padding:18px 36px; font-size:20px; background:var(--gold); color:#111; border:none; border-radius:12px; font-weight:bold; cursor:pointer; transition: transform .12s ease, background .12s ease; min-width:190px;
   }
   .menu button:hover{ background:#c6b142; transform:translateY(-2px); }
 
-  /* --- containers --- */
   .container{
-    display:none;
-    max-width:980px;
-    margin: 12px auto;
-    background: var(--panel-bg);
-    border-radius:12px;
-    padding:18px;
-    text-align:right;
-    box-sizing:border-box;
+    display:none; max-width:980px; margin: 12px auto; background: var(--panel-bg);
+    border-radius:12px; padding:18px; text-align:right; box-sizing:border-box;
   }
   .container.active{ display:block; }
-
   .container h2{ margin-top:0; color:var(--gold); }
 
   label{ display:block; margin:10px 0 6px; font-weight:bold; text-align:right; }
   input[type="text"], input[type="number"], input[type="date"], select, textarea{
-    width:100%;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid var(--gold);
-    background:var(--bg);
-    color:var(--gold);
-    font-size:15px;
-    box-sizing:border-box;
+    width:100%; padding:10px; border-radius:8px; border:1px solid var(--gold);
+    background:var(--bg); color:var(--gold); font-size:15px; box-sizing:border-box;
   }
-
   .time-group{ display:flex; gap:8px; }
   .time-group input, .time-group select{ flex:1; }
 
@@ -81,63 +49,28 @@
   .btn{ padding:12px 22px; background:var(--gold); color:#111; border:none; border-radius:8px; font-weight:bold; cursor:pointer; }
   .btn:hover{ background:#c6b142; }
 
-  /* --- Output styling (keep LTR/code look like originals) --- */
   .output{
-    display:none;
-    margin-top:14px;
-    background:#333;
-    padding:14px;
-    border-radius:8px;
-    color:var(--gold);
-    text-align:left;
-    white-space:pre-wrap;
-    direction:ltr; /* original formatting */
-    max-width:940px;
-    margin-left:auto;
-    margin-right:auto;
-    box-sizing:border-box;
+    display:none; margin-top:14px; background:#333; padding:14px; border-radius:8px;
+    color:var(--gold); text-align:left; white-space:pre-wrap; direction:ltr;
+    max-width:940px; margin-left:auto; margin-right:auto; box-sizing:border-box;
   }
 
-  /* --- Custom dropdown (for long lists) --- */
   .custom-dropdown{ position:relative; user-select:none; }
   .cd-selected{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid var(--gold);
-    background:var(--bg);
-    color:var(--gold);
-    cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:10px; border-radius:8px; border:1px solid var(--gold);
+    background:var(--bg); color:var(--gold); cursor:pointer;
   }
   .cd-selected .placeholder{ opacity:0.8; }
   .cd-panel{
-    position:absolute;
-    z-index:9999;
-    left:0; right:0;
-    top:calc(100% + 6px);
-    background:var(--bg);
-    border:1px solid rgba(224,202,81,0.15);
-    border-radius:8px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.5);
-    max-height:300px;
-    overflow:auto;
-    padding:6px;
-    display:none;
+    position:absolute; z-index:9999; left:0; right:0; top:calc(100% + 6px);
+    background:var(--bg); border:1px solid rgba(224,202,81,0.15); border-radius:8px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.5); max-height:300px; overflow:auto; padding:6px; display:none;
   }
-  .cd-option{
-    padding:10px;
-    border-radius:6px;
-    color:var(--gold);
-    cursor:pointer;
-    text-align:right;
-  }
+  .cd-option{ padding:10px; border-radius:6px; color:var(--gold); cursor:pointer; text-align:right; }
   .cd-option:hover{ background: rgba(224,202,81,0.06); }
   .cd-option.selected{ background: rgba(224,202,81,0.14); }
 
-  /* small screens */
   @media (max-width:720px){
     .menu button{ padding:14px 18px; font-size:18px; min-width:140px; }
     .cd-panel{ max-height:260px; }
@@ -233,6 +166,14 @@
   <label>الكوبي ايدي</label>
   <input type="number" id="res_copyId" placeholder="أدخل الكوبي ايدي">
 
+  <!-- جديد: اسم وكود الفني كتابتاً -->
+  <label>اسم وكود الفني كتابتا</label>
+  <input type="text" id="res_nameCode" placeholder="اكتب الاسم والكود كتابتاً">
+
+  <!-- جديد: كوبي ايدي المشرف -->
+  <label>كوبي ايدي المشرف</label>
+  <input type="number" id="res_supervisorId" placeholder="أدخل كوبي ايدي المشرف">
+
   <div id="res_levelBox" style="display:none">
     <label>مستوى الفني</label>
     <input type="number" id="res_levelNumber" placeholder="أدخل رقم المستوى">
@@ -266,8 +207,8 @@
     <input type="number" id="vio_fineAmount" placeholder="أدخل قيمة الغرامة">
   </div>
 
-  <!-- كوبي ايدي المشرف (تظهر عند شفهي) -->
-  <div id="vio_supervisorRow" style="display:none">
+  <!-- جديد: كوبي ايدي المشرف (يُستخدم دائمًا) -->
+  <div id="vio_supervisorRow">
     <label>كوبي ايدي المشرف</label>
     <input type="number" id="vio_supervisorId" placeholder="أدخل كوبي ايدي المشرف">
   </div>
@@ -279,7 +220,7 @@
       <span>&#9662;</span>
     </div>
     <div class="cd-panel" id="vio_panel" role="listbox" aria-hidden="true">
-      <!-- full options list included exactly as provided -->
+      <!-- القائمة كما هي -->
       <div class="cd-option">التهرب من المحاسبة</div>
       <div class="cd-option">استخدام خواص الميكانيك للمصلحة الشخصية</div>
       <div class="cd-option">عدم احترام  الميكانيكي او القيادة او المشرف</div>
@@ -336,7 +277,6 @@
       <div class="cd-option">عدم دخول الموجة</div>
     </div>
   </div>
-  <!-- hidden input to keep selected value (JS reads this) -->
   <input type="hidden" id="vio_selected" value="">
 
   <div class="button-row">
@@ -361,7 +301,7 @@
       <span>&#9662;</span>
     </div>
     <div class="cd-panel" id="abs_panel" role="listbox" aria-hidden="true">
-      <!-- full list from your original absent code -->
+      <!-- نفس القائمة -->
       <div class="cd-option">التهرب من المحاسبة</div>
       <div class="cd-option">استخدام خواص الميكانيك للمصلحة الشخصية</div>
       <div class="cd-option">عدم احترام  الميكانيكي او القيادة او المشرف</div>
@@ -485,7 +425,6 @@ function closeAllDropdowns(){
 }
 /* clicks on options for vio and abs panels */
 document.addEventListener('click', function(e){
-  // vio panel
   if(e.target.closest('#vio_panel') && e.target.classList.contains('cd-option')){
     const val = e.target.innerText.trim();
     document.getElementById('vio_selected').value = val;
@@ -497,7 +436,6 @@ document.addEventListener('click', function(e){
     e.stopPropagation();
     return;
   }
-  // abs panel
   if(e.target.closest('#abs_panel') && e.target.classList.contains('cd-option')){
     const val = e.target.innerText.trim();
     document.getElementById('abs_selected').value = val;
@@ -509,8 +447,6 @@ document.addEventListener('click', function(e){
     e.stopPropagation();
     return;
   }
-
-  // clicks outside dropdowns -> close them
   if(!e.target.closest('.custom-dropdown')){
     closeAllDropdowns();
   }
@@ -519,7 +455,7 @@ document.addEventListener('keydown', function(e){
   if(e.key === 'Escape') closeAllDropdowns();
 });
 
-/* ---------- VACATION: toggle between internal & secondment ---------- */
+/* ---------- VACATION: toggle ---------- */
 function vac_toggleFields(){
   const type = document.getElementById('vac_vacType').value;
   const internal = document.getElementById('vac_internalFields');
@@ -533,28 +469,22 @@ function vac_toggleFields(){
   }
 }
 
-/* ---------- VIOLATIONS: toggle fine/supervisor by level ---------- */
+/* ---------- VIOLATIONS: فقط إخفاء الغرامة عند شفهي ---------- */
 function vio_toggleByLevel(){
   const level = document.getElementById('vio_warningLevel').value;
   const fineRow = document.getElementById('vio_fineRow');
-  const supRow  = document.getElementById('vio_supervisorRow');
-
   if(level === 'شفهي'){
-    if(fineRow) fineRow.style.display = 'none';
-    if(supRow)  supRow.style.display  = 'block';
+    fineRow.style.display = 'none';
   }else{
-    if(fineRow) fineRow.style.display = 'block';
-    if(supRow)  supRow.style.display  = 'none';
+    fineRow.style.display = 'block';
   }
 }
-// init once on load in case default is شفهي
 vio_toggleByLevel();
 
 /* ---------- VACATION (internal + secondment) ---------- */
 function vac_generateVacation(){
   const type = document.getElementById('vac_vacType').value;
 
-  /* ====== الانتدابات ====== */
   if(type === 'الانتدابات'){
     const copyId = (document.getElementById('sec_copyId').value || '').trim();
     const nameCode = (document.getElementById('sec_nameCode').value || '').trim();
@@ -590,7 +520,6 @@ function vac_generateVacation(){
     return;
   }
 
-  /* ====== الإجازة الداخلية (كما هي) ====== */
   const copyId = document.getElementById('vac_copyId').value.trim();
   const duration = parseInt(document.getElementById('vac_duration').value) || 0;
   const balance = parseInt(document.getElementById('vac_balance').value) || 0;
@@ -606,7 +535,6 @@ function vac_generateVacation(){
   if(period === "م" && startHour < 12) startHour += 12;
   if(period === "ص" && startHour === 12) startHour = 0;
 
-  // use Riyadh TZ like original
   let tzDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" })); 
   let yyyy = tzDate.getFullYear();
   let mm = String(tzDate.getMonth()+1).padStart(2,'0');
@@ -677,9 +605,14 @@ function res_toggleLevel(){
 }
 function res_generate(){
   const type = document.getElementById('res_type').value;
-  const copyId = document.getElementById('res_copyId').value.trim();
-  const levelNumber = document.getElementById('res_levelNumber').value.trim();
+  const copyId = (document.getElementById('res_copyId').value || '').trim();
+  const levelNumber = (document.getElementById('res_levelNumber').value || '').trim();
+  const nameCode = (document.getElementById('res_nameCode').value || '').trim();
+  const supervisorId = (document.getElementById('res_supervisorId').value || '').trim();
+
   if(!copyId){ alert("⚠️ يرجى إدخال الكوبي ايدي"); return; }
+  if(!nameCode){ alert("⚠️ يرجى إدخال اسم وكود الفني كتابتاً"); return; }
+  if(!supervisorId){ alert("⚠️ يرجى إدخال كوبي ايدي المشرف"); return; }
 
   let result = "";
   if(type === "متدرب"){
@@ -698,13 +631,13 @@ function res_generate(){
 \`\`\`
 
 <@${copyId}>
-اسم و كود الفني
+${nameCode}
 
 \`\`\`وذلك بسبب : استقالة برتبة مستوى (متدرب & 1) \`\`\`
 
 \`نوع السحب : \`  [فاتورة](رابط الفاتورة) 
 
-\`اعتماد:\` (منشن لنفسك)
+\`اعتماد:\` <@${supervisorId}>
 
 \`توقيع مدير الخزينة: \`
 <@1182445629721563177> 
@@ -726,12 +659,12 @@ function res_generate(){
 اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه\`\`\`
 
 <@${copyId}>
-اسمه و كود الفني
+${nameCode}
 
 \`\`\`وذلك بسبب : استقالة برتبة مستوى (${levelNumber}) بناءاً على طلبه \`\`\`
 
 \`توقيع واعتماد:\`
- (منشن لنفسك)
+ <@${supervisorId}>
 
 \`يرسل الاصل الى : \`
 <@&1149742928953086105> ***`;
@@ -751,25 +684,16 @@ function res_copy(){
 function vio_generate(){
   const copyId = (document.getElementById('vio_copyId').value || '').trim();
   const warningLevel = document.getElementById('vio_warningLevel').value;
-  const fineAmountEl = document.getElementById('vio_fineAmount');
-  const fineAmount = fineAmountEl ? (fineAmountEl.value || '').trim() : '';
+  const fineAmount = (document.getElementById('vio_fineAmount')?.value || '').trim();
   const violation = document.getElementById('vio_selected').value || '';
   const supervisorId = (document.getElementById('vio_supervisorId')?.value || '').trim();
 
-  if(!copyId){
-    alert("⚠️ يرجى إدخال الكوبي ايدي"); return;
-  }
-  if(!violation){
-    alert("⚠️ يرجى اختيار سبب المخالفة"); return;
-  }
+  if(!copyId){ alert("⚠️ يرجى إدخال الكوبي ايدي"); return; }
+  if(!violation){ alert("⚠️ يرجى اختيار سبب المخالفة"); return; }
+  if(!supervisorId){ alert("⚠️ يرجى إدخال كوبي ايدي المشرف"); return; }
 
-  /* --- نموذج شفهي الجديد --- */
   if(warningLevel === 'شفهي'){
-    if(!supervisorId){
-      alert("⚠️ يرجى إدخال كوبي ايدي المشرف"); return;
-    }
-
-    const result =
+    const resultShafahi =
 `▬▬▬ ﷽ ▬▬
 \`\`\`diff
 
@@ -781,23 +705,19 @@ function vio_generate(){
 اولاً: انذار (شفهي) 
 \`\`\`
 
-\` الفني :\` <@${copyId}>
+ الكوبي ايدي للفني <@${copyId}>
 
 \`\`\`وذلك بسبب :  ${violation}\`\`\`
 
 
 \`اعتماد:\` <@${supervisorId}>`;
-
     const out = document.getElementById('vio_output');
-    out.innerText = result;
+    out.innerText = resultShafahi;
     out.style.display = 'block';
     return;
   }
 
-  /* --- بقية المستويات كما كانت --- */
-  if(!fineAmount){
-    alert("⚠️ يرجى إدخال قيمة الغرامة"); return;
-  }
+  if(!fineAmount){ alert("⚠️ يرجى إدخال قيمة الغرامة"); return; }
 
   const result =
 `*** ▬▬▬ ﷽ ▬▬
@@ -817,7 +737,7 @@ function vio_generate(){
 
 \`نوع السحب : \`  [فاتورة](رابط الفاتورة) 
 
-\`اعتماد:\` (منشن لنفسك)
+\`اعتماد:\` <@${supervisorId}>
 
 \`توقيع مدير الخزينة \`
 <@1182445629721563177> 
@@ -867,7 +787,6 @@ https://ptb.discord.com/channels/1071933157097615480/1071934723858894868 ***
 
 ***نسخه الى***
  <@&1071933357136556183>  - <@&1142626431101325403>`;
-
   const out = document.getElementById('abs_output');
   out.innerText = resultText;
   out.style.display = 'block';
@@ -884,7 +803,6 @@ function ext_generate(){
   const days = parseInt(document.getElementById('ext_days').value,10);
   if(!copyId || !days || days <= 0){ alert("⚠️ يرجى إدخال الكوبي ايدي والمدة بالأيام صحيحة"); return; }
 
-  // start = today (Riyadh timezone attempt), end = today + days
   let tzDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" }));
   let startDate = new Date(tzDate.getFullYear(), tzDate.getMonth(), tzDate.getDate());
   let endDate = new Date(startDate);
@@ -918,7 +836,6 @@ function ext_generate(){
 ***02/ في حال انتهاء الاجازة او اردت قطعها يجب فتح تكت اجازة وطلب قطعها او انهائها ويمنع المباشرة حتى ازالة رول اجازة وظيفية***
  
 <@&1149742928953086105>`;
-
   const out = document.getElementById('ext_output');
   out.innerText = result;
   out.style.display = 'block';
@@ -929,12 +846,9 @@ function ext_copy(){
   navigator.clipboard.writeText(out.innerText).then(()=>alert("✅ تم النسخ"));
 }
 
-/* ---------- utilities: show default tab ---------- */
+/* ---------- default tab ---------- */
 show('vacBox');
 </script>
 
 </body>
 </html>
-
-
-
