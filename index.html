@@ -149,7 +149,7 @@
 <h1>📋 الشؤون الإدارية📋</h1>
 
 <div class="menu">
-  <button onclick="show('vacBox')">الإجازات</button>
+  <button onclick="show('vacBox')">الإجازات و الانتدابات</button>
   <button onclick="show('resignBox')">الاستقالة</button>
   <button onclick="show('violBox')">المخالفات</button>
   <button onclick="show('absBox')">فني لم يحضر</button>
@@ -158,7 +158,7 @@
 
 <!-- ================= VACATION (إجازات + الانتدابات) ================= -->
 <div id="vacBox" class="container">
-  <h2>🧳 الإجازات 🧳</h2>
+  <h2>🧳 الإجازات و الانتدابات 🧳</h2>
 
   <label>الإجازة لمن؟</label>
   <select id="vac_vacType" onchange="vac_toggleFields()">
@@ -204,6 +204,8 @@
       <option>آمن المنشآت</option>
       <option>حرس الحدود</option>
       <option>الهلال الأحمر</option>
+      <option>آمن عام</option>
+      <option>قوات الطؤارئ</option>
     </select>
 
     <label>المدة (بالأيام)</label>
@@ -870,4 +872,5 @@ show('vacBox');
 
 </body>
 </html>
+
 
