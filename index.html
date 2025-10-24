@@ -22,11 +22,11 @@
     box-sizing:border-box;
   }
   h1{ margin:12px 0 18px; font-size:28px; }
-  .menu{
-    display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom:18px;
-  }
+  .menu{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-bottom:18px; }
   .menu button{
-    padding:18px 36px; font-size:20px; background:var(--gold); color:#111; border:none; border-radius:12px; font-weight:bold; cursor:pointer; transition: transform .12s ease, background .12s ease; min-width:190px;
+    padding:18px 36px; font-size:20px; background:var(--gold); color:#111;
+    border:none; border-radius:12px; font-weight:bold; cursor:pointer;
+    transition: transform .12s ease, background .12s ease; min-width:190px;
   }
   .menu button:hover{ background:#c6b142; transform:translateY(-2px); }
 
@@ -38,7 +38,7 @@
   .container h2{ margin-top:0; color:var(--gold); }
 
   label{ display:block; margin:10px 0 6px; font-weight:bold; text-align:right; }
-  input[type="text"], input[type="number"], input[type="date"], select, textarea{
+  input[type="text"], input[type="number"], select, textarea{
     width:100%; padding:10px; border-radius:8px; border:1px solid var(--gold);
     background:var(--bg); color:var(--gold); font-size:15px; box-sizing:border-box;
   }
@@ -158,19 +158,26 @@
   <h2>📞نموذج الاستقالة📞</h2>
 
   <label>استقالة لمن ؟</label>
-  <select id="res_type">
+  <select id="res_type" onchange="res_toggleLevel()">
     <option value="مستوى متدرب">مستوى متدرب</option>
     <option value="مستوى 1">مستوى 1</option>
+    <option value="اعلى">مستوى 2 فأعلى</option>
   </select>
 
   <label>الكوبي ايدي</label>
   <input type="number" id="res_copyId" placeholder="أدخل الكوبي ايدي">
 
-  <!-- اسم وكود الفني كتابتاً -->
+  <!-- يظهر فقط عند اختيار مستوى 2 فأعلى -->
+  <div id="res_levelBox" style="display:none">
+    <label>رقم المستوى (2 فأعلى)</label>
+    <input type="number" id="res_levelNumber" min="2" placeholder="أدخل رقم المستوى">
+  </div>
+
+  <!-- جديد: اسم وكود الفني كتابتا -->
   <label>اسم وكود الفني كتابتا</label>
   <input type="text" id="res_nameCode" placeholder="اكتب الاسم والكود كتابتاً">
 
-  <!-- كوبي ايدي المشرف -->
+  <!-- جديد: كوبي ايدي المشرف -->
   <label>كوبي ايدي المشرف</label>
   <input type="number" id="res_supervisorId" placeholder="أدخل كوبي ايدي المشرف">
 
@@ -201,7 +208,7 @@
     <input type="number" id="vio_fineAmount" placeholder="أدخل قيمة الغرامة">
   </div>
 
-  <!-- كوبي ايدي المشرف -->
+  <!-- جديد: كوبي ايدي المشرف -->
   <div id="vio_supervisorRow">
     <label>كوبي ايدي المشرف</label>
     <input type="number" id="vio_supervisorId" placeholder="أدخل كوبي ايدي المشرف">
@@ -214,7 +221,7 @@
       <span>&#9662;</span>
     </div>
     <div class="cd-panel" id="vio_panel" role="listbox" aria-hidden="true">
-      <!-- القائمة كما هي -->
+      <!-- نفس القائمة الطويلة -->
       <div class="cd-option">التهرب من المحاسبة</div>
       <div class="cd-option">استخدام خواص الميكانيك للمصلحة الشخصية</div>
       <div class="cd-option">عدم احترام  الميكانيكي او القيادة او المشرف</div>
@@ -295,7 +302,7 @@
       <span>&#9662;</span>
     </div>
     <div class="cd-panel" id="abs_panel" role="listbox" aria-hidden="true">
-      <!-- نفس القائمة -->
+      <!-- نفس القائمة الطويلة -->
       <div class="cd-option">التهرب من المحاسبة</div>
       <div class="cd-option">استخدام خواص الميكانيك للمصلحة الشخصية</div>
       <div class="cd-option">عدم احترام  الميكانيكي او القيادة او المشرف</div>
@@ -440,37 +447,24 @@ document.addEventListener('click', function(e){
     e.stopPropagation();
     return;
   }
-  if(!e.target.closest('.custom-dropdown')){
-    closeAllDropdowns();
-  }
+  if(!e.target.closest('.custom-dropdown')) closeAllDropdowns();
 });
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape') closeAllDropdowns();
-});
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAllDropdowns(); });
 
 /* ---------- VACATION: toggle ---------- */
 function vac_toggleFields(){
   const type = document.getElementById('vac_vacType').value;
   const internal = document.getElementById('vac_internalFields');
   const secondment = document.getElementById('vac_secondmentFields');
-  if(type === 'الانتدابات'){
-    internal.style.display = 'none';
-    secondment.style.display = 'block';
-  }else{
-    internal.style.display = 'block';
-    secondment.style.display = 'none';
-  }
+  if(type === 'الانتدابات'){ internal.style.display='none'; secondment.style.display='block'; }
+  else{ internal.style.display='block'; secondment.style.display='none'; }
 }
 
 /* ---------- VIOLATIONS: hide fine on "شفهي" ---------- */
 function vio_toggleByLevel(){
   const level = document.getElementById('vio_warningLevel').value;
   const fineRow = document.getElementById('vio_fineRow');
-  if(level === 'شفهي'){
-    fineRow.style.display = 'none';
-  }else{
-    fineRow.style.display = 'block';
-  }
+  fineRow.style.display = (level === 'شفهي') ? 'none' : 'block';
 }
 vio_toggleByLevel();
 
@@ -506,10 +500,8 @@ function vac_generateVacation(){
 
 
 <@&1149742928953086105> ***`;
-
     const out = document.getElementById('vac_output');
-    out.innerText = result;
-    out.style.display = 'block';
+    out.innerText = result; out.style.display='block';
     return;
   }
 
@@ -521,8 +513,7 @@ function vac_generateVacation(){
   const period = document.getElementById('vac_startPeriod').value;
 
   if(!copyId || duration <= 0 || balance <= 0 || startHour <= 0){
-    alert("⚠️ يرجى إدخال جميع الحقول بشكل صحيح");
-    return;
+    alert("⚠️ يرجى إدخال جميع الحقول بشكل صحيح"); return;
   }
 
   if(period === "م" && startHour < 12) startHour += 12;
@@ -534,17 +525,12 @@ function vac_generateVacation(){
   let dd = String(tzDate.getDate()).padStart(2,'0');
 
   let startDate = new Date(`${yyyy}-${mm}-${dd}T${String(startHour).padStart(2,'0')}:${String(startMinute).padStart(2,'0')}:00`);
-  let endDate = new Date(startDate);
-  endDate.setHours(endDate.getHours() + duration);
+  let endDate = new Date(startDate); endDate.setHours(endDate.getHours() + duration);
 
   function formatDate(date){
-    let y=date.getFullYear();
-    let m=String(date.getMonth()+1).padStart(2,'0');
-    let d=String(date.getDate()).padStart(2,'0');
-    let h=date.getHours();
-    let min=String(date.getMinutes()).padStart(2,'0');
-    let per=h>=12?"م":"ص";
-    h=h%12; h=h?h:12;
+    let y=date.getFullYear(), m=String(date.getMonth()+1).padStart(2,'0'), d=String(date.getDate()).padStart(2,'0');
+    let h=date.getHours(), min=String(date.getMinutes()).padStart(2,'0');
+    let per=h>=12?"م":"ص"; h=h%12; h=h?h:12;
     return `${y}/${m}/${d}| ${h}:${min}${per}`;
   }
 
@@ -581,32 +567,32 @@ function vac_generateVacation(){
 
 <@&1149742928953086105>`;
   const out = document.getElementById('vac_output');
-  out.innerText = result;
-  out.style.display = 'block';
-}
-function vac_copyResult(){
-  const out = document.getElementById('vac_output');
-  if(!out || !out.innerText.trim()){ alert("⚠️ لا يوجد نتيجة لنسخها"); return; }
-  navigator.clipboard.writeText(out.innerText).then(()=>alert("✅ تم نسخ النتيجة"));
+  out.innerText = result; out.style.display='block';
 }
 
 /* ---------- RESIGNATION ---------- */
+function res_toggleLevel(){
+  const t = document.getElementById('res_type').value;
+  document.getElementById('res_levelBox').style.display = (t==='اعلى') ? 'block' : 'none';
+}
 function res_generate(){
-  const type = document.getElementById('res_type').value;              // مستوى متدرب | مستوى 1
+  const type = document.getElementById('res_type').value; // مستوى متدرب | مستوى 1 | اعلى
   const copyId = (document.getElementById('res_copyId').value || '').trim();
   const nameCode = (document.getElementById('res_nameCode').value || '').trim();
   const supervisorId = (document.getElementById('res_supervisorId').value || '').trim();
+  const levelNumber = (document.getElementById('res_levelNumber').value || '').trim();
 
   if(!copyId){ alert("⚠️ يرجى إدخال الكوبي ايدي"); return; }
   if(!nameCode){ alert("⚠️ يرجى إدخال اسم وكود الفني كتابتاً"); return; }
   if(!supervisorId){ alert("⚠️ يرجى إدخال كوبي ايدي المشرف"); return; }
 
-  // يبقى نفس النموذج، ويتغير فقط سطر السبب:
-  const reasonLine = (type === 'مستوى متدرب')
-    ? "استقالة برتبة مستوى (متدرب )"
-    : "استقالة برتبة مستوى ( 1)";
+  // فرع مستوى متدرب أو مستوى 1: نفس الرسالة القديمة مع تبديل سبب السطر
+  if(type === 'مستوى متدرب' || type === 'مستوى 1'){
+    const reasonLine = (type === 'مستوى متدرب')
+      ? "استقالة برتبة مستوى (متدرب )"
+      : "استقالة برتبة مستوى ( 1)";
 
-  const result =
+    const result =
 `*** ▬▬▬ ﷽ ▬▬
 \`\`\`diff
 
@@ -635,10 +621,41 @@ ${nameCode}
 
 يرسل الاصل الى : 
 <@&1149742928953086105> ***`;
+    const out = document.getElementById('res_output');
+    out.innerText = result; out.style.display='block';
+    return;
+  }
 
-  const out = document.getElementById('res_output');
-  out.innerText = result;
-  out.style.display = 'block';
+  // فرع مستوى 2 فأعلى: يعود للقالب الخاص القديم + إدخالاتنا الجديدة
+  if(type === 'اعلى'){
+    if(!levelNumber || parseInt(levelNumber,10) < 2){
+      alert("⚠️ أدخل رقم مستوى صالح (2 فأعلى)"); return;
+    }
+    const resultHigh =
+`*** ▬▬▬ ﷽ ▬▬
+\`\`\`diff
+
+-الموضوع : قرار انهاء خدمات
+\`\`\`
+\`\`\`cs
+# بعد الاطلاع على نظام التوظيف والترقيات وانهاء الخدمة الصادر من ادارة الكراج قررنا مايلي 
+ 
+اولاً: تنهى خدمات الفني ادناه اعتبارا من تاريخه\`\`\`
+
+<@${copyId}>
+${nameCode}
+
+\`\`\`وذلك بسبب : استقالة برتبة مستوى (${levelNumber}) بناءاً على طلبه \`\`\`
+
+\`توقيع واعتماد:\`
+<@${supervisorId}>
+
+\`يرسل الاصل الى : \`
+<@&1149742928953086105> ***`;
+    const out = document.getElementById('res_output');
+    out.innerText = resultHigh; out.style.display='block';
+    return;
+  }
 }
 function res_copy(){
   const out = document.getElementById('res_output');
@@ -678,8 +695,7 @@ function vio_generate(){
 
 \`اعتماد:\` <@${supervisorId}>`;
     const out = document.getElementById('vio_output');
-    out.innerText = resultShafahi;
-    out.style.display = 'block';
+    out.innerText = resultShafahi; out.style.display='block';
     return;
   }
 
@@ -711,18 +727,9 @@ function vio_generate(){
 
 يرسل الاصل الى : 
 <@&1149742928953086105> ***`;
-
   const out = document.getElementById('vio_output');
-  out.innerText = result;
-  out.style.display = 'block';
+  out.innerText = result; out.style.display='block';
 }
-function vio_toggleByLevel(){
-  const level = document.getElementById('vio_warningLevel').value;
-  const fineRow = document.getElementById('vio_fineRow');
-  fineRow.style.display = (level === 'شفهي') ? 'none' : 'block';
-}
-vio_toggleByLevel();
-
 function vio_copy(){
   const out = document.getElementById('vio_output');
   if(!out || !out.innerText.trim()){ alert("⚠️ لا يوجد نتيجة لنسخها"); return; }
@@ -760,8 +767,7 @@ https://ptb.discord.com/channels/1071933157097615480/1071934723858894868 ***
 ***نسخه الى***
  <@&1071933357136556183>  - <@&1142626431101325403>`;
   const out = document.getElementById('abs_output');
-  out.innerText = resultText;
-  out.style.display = 'block';
+  out.innerText = resultText; out.style.display='block';
 }
 function abs_copy(){
   const out = document.getElementById('abs_output');
@@ -777,15 +783,9 @@ function ext_generate(){
 
   let tzDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" }));
   let startDate = new Date(tzDate.getFullYear(), tzDate.getMonth(), tzDate.getDate());
-  let endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + days);
+  let endDate = new Date(startDate); endDate.setDate(endDate.getDate() + days);
 
-  function fmtYMD(d){
-    let y=d.getFullYear();
-    let m=String(d.getMonth()+1).padStart(2,'0');
-    let day=String(d.getDate()).padStart(2,'0');
-    return `${y}/${m}/${day}`;
-  }
+  function fmtYMD(d){ let y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0'); return `${y}/${m}/${day}`; }
 
   const result =
 `***\`  إجازة خارجية  \`***  
@@ -809,8 +809,7 @@ function ext_generate(){
  
 <@&1149742928953086105>`;
   const out = document.getElementById('ext_output');
-  out.innerText = result;
-  out.style.display = 'block';
+  out.innerText = result; out.style.display='block';
 }
 function ext_copy(){
   const out = document.getElementById('ext_output');
