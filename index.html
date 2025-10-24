@@ -245,7 +245,7 @@
   <div id="res_output" class="output"></div>
 </div>
 
-<!-- ================= VIOLATIONS (المخالفات) with fixed dropbox ================= -->
+<!-- ================= VIOLATIONS (المخالفات) ================= -->
 <div id="violBox" class="container">
   <h2>📋المخالفات📋</h2>
 
@@ -253,26 +253,33 @@
   <input type="number" id="vio_copyId" placeholder="أدخل الكوبي ايدي">
 
   <label>رقم الإنذار الوظيفي</label>
-  <select id="vio_warningLevel">
+  <select id="vio_warningLevel" onchange="vio_toggleByLevel()">
     <option value="شفهي">شفهي</option>
     <option value="اول">اول</option>
     <option value="ثاني">ثاني</option>
     <option value="نهائي">نهائي</option>
   </select>
 
-  <label>قيمة الغرامة</label>
-  <input type="number" id="vio_fineAmount" placeholder="أدخل قيمة الغرامة">
+  <!-- قيمة الغرامة (تختفي عند شفهي) -->
+  <div id="vio_fineRow">
+    <label>قيمة الغرامة</label>
+    <input type="number" id="vio_fineAmount" placeholder="أدخل قيمة الغرامة">
+  </div>
+
+  <!-- كوبي ايدي المشرف (تظهر عند شفهي) -->
+  <div id="vio_supervisorRow" style="display:none">
+    <label>كوبي ايدي المشرف</label>
+    <input type="number" id="vio_supervisorId" placeholder="أدخل كوبي ايدي المشرف">
+  </div>
 
   <label>المخالفات</label>
-
-  <!-- Custom dropdown: click to open; scrollable; options hidden until click -->
   <div class="custom-dropdown" id="vio_dropdown">
     <div class="cd-selected" onclick="toggleDropdown('vio')">
       <span class="placeholder">اختر المخالفة</span>
       <span>&#9662;</span>
     </div>
     <div class="cd-panel" id="vio_panel" role="listbox" aria-hidden="true">
-      <!-- full options list included exactly as you provided -->
+      <!-- full options list included exactly as provided -->
       <div class="cd-option">التهرب من المحاسبة</div>
       <div class="cd-option">استخدام خواص الميكانيك للمصلحة الشخصية</div>
       <div class="cd-option">عدم احترام  الميكانيكي او القيادة او المشرف</div>
@@ -340,7 +347,7 @@
   <div id="vio_output" class="output"></div>
 </div>
 
-<!-- ================= ABSENT (فني لم يحضر) with fixed dropbox ================= -->
+<!-- ================= ABSENT (فني لم يحضر) ================= -->
 <div id="absBox" class="container">
   <h2>🧲نموذج إستدعاء للفني الذي لم يحضر🧲</h2>
 
@@ -436,7 +443,7 @@
   <div id="abs_output" class="output"></div>
 </div>
 
-<!-- ================= EXTERNAL VACATION (إجازة خارجية) NEW ================= -->
+<!-- ================= EXTERNAL VACATION (إجازة خارجية) ================= -->
 <div id="extBox" class="container">
   <h2>✈️نموذج إجازة خارجية✈️</h2>
 
@@ -526,11 +533,28 @@ function vac_toggleFields(){
   }
 }
 
-/* ---------- VACATION module (internal + secondment) ---------- */
+/* ---------- VIOLATIONS: toggle fine/supervisor by level ---------- */
+function vio_toggleByLevel(){
+  const level = document.getElementById('vio_warningLevel').value;
+  const fineRow = document.getElementById('vio_fineRow');
+  const supRow  = document.getElementById('vio_supervisorRow');
+
+  if(level === 'شفهي'){
+    if(fineRow) fineRow.style.display = 'none';
+    if(supRow)  supRow.style.display  = 'block';
+  }else{
+    if(fineRow) fineRow.style.display = 'block';
+    if(supRow)  supRow.style.display  = 'none';
+  }
+}
+// init once on load in case default is شفهي
+vio_toggleByLevel();
+
+/* ---------- VACATION (internal + secondment) ---------- */
 function vac_generateVacation(){
   const type = document.getElementById('vac_vacType').value;
 
-  /* ====== فرع الانتدابات ====== */
+  /* ====== الانتدابات ====== */
   if(type === 'الانتدابات'){
     const copyId = (document.getElementById('sec_copyId').value || '').trim();
     const nameCode = (document.getElementById('sec_nameCode').value || '').trim();
@@ -566,7 +590,7 @@ function vac_generateVacation(){
     return;
   }
 
-  /* ====== فرع الإجازة الداخلية (منظورك الأصلي) ====== */
+  /* ====== الإجازة الداخلية (كما هي) ====== */
   const copyId = document.getElementById('vac_copyId').value.trim();
   const duration = parseInt(document.getElementById('vac_duration').value) || 0;
   const balance = parseInt(document.getElementById('vac_balance').value) || 0;
@@ -646,7 +670,7 @@ function vac_copyResult(){
   navigator.clipboard.writeText(out.innerText).then(()=>alert("✅ تم نسخ النتيجة"));
 }
 
-/* ---------- RESIGNATION module (exact text preserved) ---------- */
+/* ---------- RESIGNATION ---------- */
 function res_toggleLevel(){
   const t = document.getElementById('res_type').value;
   document.getElementById('res_levelBox').style.display = (t==='اعلى') ? 'block' : 'none';
@@ -723,18 +747,56 @@ function res_copy(){
   navigator.clipboard.writeText(out.innerText).then(()=>alert("✅ تم النسخ"));
 }
 
-/* ---------- VIOLATIONS (المخالفات) module using custom dropdown ---------- */
+/* ---------- VIOLATIONS (المخالفات) ---------- */
 function vio_generate(){
-  const copyId = document.getElementById('vio_copyId').value.trim();
+  const copyId = (document.getElementById('vio_copyId').value || '').trim();
   const warningLevel = document.getElementById('vio_warningLevel').value;
-  const fineAmount = document.getElementById('vio_fineAmount').value.trim();
+  const fineAmountEl = document.getElementById('vio_fineAmount');
+  const fineAmount = fineAmountEl ? (fineAmountEl.value || '').trim() : '';
   const violation = document.getElementById('vio_selected').value || '';
+  const supervisorId = (document.getElementById('vio_supervisorId')?.value || '').trim();
 
-  if(!copyId || !fineAmount){
-    alert("⚠️ يرجى إدخال الكوبي ايدي وقيمة الغرامة"); return;
+  if(!copyId){
+    alert("⚠️ يرجى إدخال الكوبي ايدي"); return;
   }
   if(!violation){
     alert("⚠️ يرجى اختيار سبب المخالفة"); return;
+  }
+
+  /* --- نموذج شفهي الجديد --- */
+  if(warningLevel === 'شفهي'){
+    if(!supervisorId){
+      alert("⚠️ يرجى إدخال كوبي ايدي المشرف"); return;
+    }
+
+    const result =
+`▬▬▬ ﷽ ▬▬
+\`\`\`diff
+
+-الموضوع : انذار (شفهي) 
+\`\`\`
+\`\`\`cs
+# بعد الاطلاع على نظام المخالفات والعقوبات الصادر من ادارة الكراج قررنا مايلي 
+ 
+اولاً: انذار (شفهي) 
+\`\`\`
+
+ الكوبي ايدي للفني <@${copyId}>
+
+\`\`\`وذلك بسبب :  ${violation}\`\`\`
+
+
+\`اعتماد:\` <@${supervisorId}>`;
+
+    const out = document.getElementById('vio_output');
+    out.innerText = result;
+    out.style.display = 'block';
+    return;
+  }
+
+  /* --- بقية المستويات كما كانت --- */
+  if(!fineAmount){
+    alert("⚠️ يرجى إدخال قيمة الغرامة"); return;
   }
 
   const result =
@@ -768,13 +830,14 @@ function vio_generate(){
   out.innerText = result;
   out.style.display = 'block';
 }
+
 function vio_copy(){
   const out = document.getElementById('vio_output');
   if(!out || !out.innerText.trim()){ alert("⚠️ لا يوجد نتيجة لنسخها"); return; }
   navigator.clipboard.writeText(out.innerText).then(()=>alert("✅ تم النسخ"));
 }
 
-/* ---------- ABSENT (فني لم يحضر) module using custom dropdown ---------- */
+/* ---------- ABSENT (فني لم يحضر) ---------- */
 function abs_generate(){
   const copyId = document.getElementById('abs_copyId').value.trim();
   const reason = document.getElementById('abs_selected').value || '';
@@ -815,7 +878,7 @@ function abs_copy(){
   navigator.clipboard.writeText(out.innerText).then(()=>alert("✅ تم النسخ"));
 }
 
-/* ---------- EXTERNAL VACATION (إجازة خارجية) new module - exact template ---------- */
+/* ---------- EXTERNAL VACATION (إجازة خارجية) ---------- */
 function ext_generate(){
   const copyId = document.getElementById('ext_copyId').value.trim();
   const days = parseInt(document.getElementById('ext_days').value,10);
@@ -872,5 +935,4 @@ show('vacBox');
 
 </body>
 </html>
-
 
