@@ -595,7 +595,7 @@ function vac_generateVacation(){
   // سطر كوبي القيادة (يوضع فوق منشن الرول)
   let leadershipLine = '';
   if(isLeadershipReward){
-    leadershipLine = `\n***\`كوبي يوزر آيدي القيادة :\` <@${balanceRaw}>***\n`;
+    leadershipLine = `\n***\`توقيع و اعتماد :\` <@${balanceRaw}>***\n`;
   }
 
   const result =
@@ -625,7 +625,9 @@ ${topBalanceLine}***من تاريخ ${formatDate(startDate)} ***
 
 ***05/يمنع منعاً باتاً تغيير الاسم داخل المقاطعة حسب [قوانين الاجازات](https://ptb.discord.com/channels/1071933157097615480/1071934713524133918/1416990256070135900) ***
 
-${leadershipLine}<@&1149742928953086105>`;
+${leadershipLine}
+
+<@&1149742928953086105>`;
   const out = document.getElementById('vac_output');
   out.innerText = result; out.style.display='block';
 }
@@ -922,6 +924,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
 
