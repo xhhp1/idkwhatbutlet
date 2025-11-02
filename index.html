@@ -100,9 +100,10 @@
   <select id="vac_vacType" onchange="vac_toggleFields()">
     <option value="فني">فني</option>
     <option value="مشرف">مشرف</option>
+    <option value="الانتدابات">الانتدابات</option> <!-- تحت مشرف -->
     <option value="مكافأة قيادية">مكافأة قيادية</option>
+    <option value="إجازة متميز الأسبوع">إجازة متميز الأسبوع</option>
     <option value="إجازة تاجر">إجازة تاجر</option>
-    <option value="الانتدابات">الانتدابات</option>
   </select>
 
   <!-- ===== حقول الإجازة الداخلية ===== -->
@@ -456,7 +457,7 @@ function vac_toggleFields(){
     secondment.style.display='none';
   }
 
-  // تبديل الحقل + إظهار صندوق المخاطَب في "مكافأة قيادية"
+  // مكافأة قيادية: إظهار المخاطَب وتبديل حقل الرصيد
   if(type === 'مكافأة قيادية'){
     balanceLabel.textContent = 'توقيع و اعتماد : ';
     balanceInput.value = '';
@@ -521,7 +522,7 @@ function vac_generateVacation(){
     return;
   }
 
-  // ===== الإجازة الداخلية (فني/مشرف/مكافأة قيادية/إجازة تاجر) =====
+  // ===== الإجازة الداخلية (فني/مشرف/مكافأة قيادية/إجازة متميز الأسبوع/إجازة تاجر) =====
   const copyId = (document.getElementById('vac_copyId').value || '').trim();
   const duration = parseInt(document.getElementById('vac_duration').value, 10) || 0;
   const balanceRaw = (document.getElementById('vac_balance').value || '').trim();
@@ -576,6 +577,7 @@ function vac_generateVacation(){
   // عنوان الرسالة
   let titleLine = 'إجازة داخلية';
   if(type === 'مكافأة قيادية') titleLine = 'مكافأة قيادية';
+  else if(type === 'إجازة متميز الأسبوع') titleLine = 'إجازة متميز الأسبوع';
   else if(type === 'إجازة تاجر') titleLine = 'إجازة تاجر';
 
   // المخاطَب
@@ -924,7 +926,3 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
-
-
-
-
