@@ -6,19 +6,21 @@
   <title>مولد الاسم التلقائي</title>
   <style>
     :root{
-      --bg: #374F1E;
+      --bg: #05464C;          /* لون الخلفية */
       --panel: rgba(255,255,255,0.06);
       --accent: #e0ca51;
-      --text: #fff;
+      --text: #ffffff;
       --muted: rgba(255,255,255,0.85);
       --glass: rgba(0,0,0,0.18);
       --radius: 16px;
-      /* حقول فاتحة لظهور القوائم بوضوح */
-      --field-bg: #fff;
-      --field-text: #111;
-      --field-border: rgba(0,0,0,0.15);
+
+      /* حقول إدخال ملوّنة */
+      --field-bg: #759E9A;    /* طلبت جعل كل الصناديق بهذا اللون */
+      --field-text: #0b1e1f;  /* نص غامق ليظهر بوضوح */
+      --field-border: rgba(0,0,0,0.25);
       --focus: #d7c34e;
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -42,7 +44,7 @@
       padding:24px;
       box-shadow: 0 14px 36px rgba(0,0,0,0.45);
       border:1px solid rgba(255,255,255,0.05);
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(4px);
       transition: transform .2s ease;
     }
     .card:hover{ transform:translateY(-1px) }
@@ -71,7 +73,7 @@
       margin-bottom:8px;
     }
 
-    /* حقول بإضاءة (خلفية فاتحة ونص غامق) لظهور القوائم */
+    /* الحقول والقوائم */
     select, input[type="text"], input[type="number"]{
       appearance:none;
       -webkit-appearance:none;
@@ -83,21 +85,21 @@
       font-size:15px;
       min-width:140px;
       outline:none;
-      transition:border .15s ease, box-shadow .15s ease, transform .05s ease;
+      transition:border .15s ease, box-shadow .15s ease, transform .05s ease, background .15s ease;
     }
     select:focus, input:focus{
       border-color:var(--focus);
-      box-shadow:0 0 0 3px rgba(224,202,81,.2);
+      box-shadow:0 0 0 3px rgba(224,202,81,.25);
     }
     select:active, input:active{ transform:scale(.998) }
 
-    /* الخيارات داخل القوائم لضمان ظهور اللون */
+    /* لضمان ألوان عناصر القائمة */
     option{
-      background:#ffffff;
-      color:#111111;
+      background:#e0ecea;     /* درجة فاتحة تناسب الـ #759E9A */
+      color:#0b1e1f;
     }
 
-    /* للأرقام والحروف نخلي الاتجاه LTR فقط داخل الحقل */
+    /* للأرقام والأكواد نخلي الاتجاه LTR داخل الحقل */
     .ltr{ direction:ltr; text-align:left }
 
     .grow{flex:1 1 220px; min-width:180px}
@@ -150,10 +152,22 @@
       font-weight:600;
     }
 
-    .tiny{
-      font-size:12px;
-      color:var(--muted);
+    .switch{
+      display:flex; align-items:center; gap:8px; user-select:none; cursor:pointer;
+      font-size:13px; color:var(--muted);
     }
+    .switch input{ display:none; }
+    .toggle{
+      width:42px; height:24px; border-radius:999px; background:#86b6b1; position:relative; transition:.2s;
+      border:1px solid var(--field-border);
+    }
+    .toggle::after{
+      content:""; position:absolute; top:2px; right:2px; width:20px; height:20px; border-radius:50%;
+      background:#fff; transition:.2s;
+      box-shadow:0 1px 3px rgba(0,0,0,.25);
+    }
+    .switch input:checked + .toggle{ background:#c9d7d5; }
+    .switch input:checked + .toggle::after{ right:20px; }
 
     .copied{
       display:inline-block;
@@ -180,7 +194,7 @@
 
     <!-- الصف الأول -->
     <div class="row">
-      <div>
+      <div id="prefixBlock">
         <label for="prefix">البادئة</label>
         <select id="prefix" class="ltr" aria-label="البادئة">
           <option value="CD" selected>CD</option>
@@ -191,8 +205,16 @@
       </div>
 
       <div>
-        <label for="letter">اختر الحرف</label>
-        <select id="letter" class="ltr" aria-label="الحرف">
+        <label class="switch" title="إظهار/إخفاء البادئة">
+          <input id="showPrefix" type="checkbox" checked />
+          <span class="toggle"></span>
+          <span>إظهار البادئة</span>
+        </label>
+      </div>
+
+      <div>
+        <label for="letter">اختر كود قطاعك</label>
+        <select id="letter" class="ltr" aria-label="كود القطاع">
           <option value="R">R</option>
           <option value="H">H</option>
           <option value="P">P</option>
@@ -200,21 +222,19 @@
           <option value="E">E</option>
           <option value="M">M</option>
         </select>
-        <div class="tiny">القائمة: R - H - P - G - E - M</div>
       </div>
 
       <div class="grow">
-        <label for="number">الرقم (3 خانات تلقائياً)</label>
+        <label for="number">اكتب رقم كودك</label>
         <input id="number" type="number" min="0" max="999" value="21" class="ltr" />
-        <div class="tiny">أدخل الرقم فقط (يعرض كـ 021)</div>
       </div>
     </div>
 
     <!-- الصف الثاني -->
     <div class="row">
       <div class="grow">
-        <label for="weapon">اختر من القائمة</label>
-        <select id="weapon" dir="rtl" aria-label="القائمة العربية">
+        <label for="weapon">اختر توجيهك</label>
+        <select id="weapon" dir="rtl" aria-label="التوجيه">
           <option value="سلاح">سلاح</option>
           <option value="حـد">حـد</option>
           <option value="شاهين">شاهين</option>
@@ -231,9 +251,8 @@
       </div>
 
       <div class="grow">
-        <label for="customLabel">نص إضافي (اختياري)</label>
-        <input id="customLabel" type="text" placeholder="مثال: اسم أو وصف" />
-        <div class="tiny">يمكنك إضافة كلمة بعد الاختيار</div>
+        <label for="customLabel">رقم توزيعك</label>
+        <input id="customLabel" type="text" class="ltr" placeholder="مثال: 12" />
       </div>
     </div>
 
@@ -241,8 +260,6 @@
     <div class="controls">
       <button class="btn" id="generateBtn">عرض ونسخ</button>
       <button class="btn secondary" id="clearBtn">إعادة ضبط</button>
-      <div style="flex:1"></div>
-      <div class="tiny">المعاينة تُحدَّث تلقائياً</div>
     </div>
 
     <!-- المعاينة -->
@@ -258,6 +275,8 @@
   <script>
     // DOM refs
     const prefixEl = document.getElementById('prefix');
+    const prefixBlock = document.getElementById('prefixBlock');
+    const showPrefixEl = document.getElementById('showPrefix');
     const letterEl = document.getElementById('letter');
     const numEl = document.getElementById('number');
     const weaponEl = document.getElementById('weapon');
@@ -268,25 +287,38 @@
     const clearBtn = document.getElementById('clearBtn');
     const copiedBadge = document.getElementById('copiedBadge');
 
-    // 3 digits
+    // 3 digits pad
     function padNumber(n){
-      const num = parseInt(n,10) || 0;
-      if(num < 0) return '000';
+      const num = parseInt(n,10);
+      if (isNaN(num) || num < 0) return '000';
       return String(num).padStart(3,'0');
     }
 
     function buildLabel(){
+      const usePrefix = showPrefixEl.checked;
       const prefix = (prefixEl.value || 'CD').trim();
       const letter = (letterEl.value || 'G').trim();
       const number = padNumber(numEl.value);
       const weapon = (weaponEl.value || '').trim();
       const custom = (customEl.value || '').trim();
-      const main = `| [ ${prefix} | ${letter}-${number} ] ${weapon}`;
+
+      // داخل الأقواس المربعة
+      // إذا كانت البادئة مفعّلة: "PREFIX | LETTER-NNN"
+      // إذا غير مفعّلة: "LETTER-NNN" فقط
+      const inside = usePrefix ? `${prefix} | ${letter}-${number}` : `${letter}-${number}`;
+
+      const main = `| [ ${inside} ] ${weapon}`;
       return custom ? `${main} ${custom}` : main;
     }
 
     function updatePreview(){
       previewEl.textContent = buildLabel();
+    }
+
+    function syncPrefixVisibility(){
+      const on = showPrefixEl.checked;
+      prefixBlock.style.display = on ? '' : 'none';
+      updatePreview();
     }
 
     async function copyPreview(){
@@ -310,25 +342,26 @@
       setTimeout(()=>copiedBadge.classList.remove('show'), 1600);
     }
 
-    [prefixEl, letterEl, numEl, weaponEl, customEl].forEach(el=>{
-      el.addEventListener('input', updatePreview);
-      el.addEventListener('change', updatePreview);
+    [prefixEl, letterEl, numEl, weaponEl, customEl, showPrefixEl].forEach(el=>{
+      el.addEventListener('input', ()=> { if(el===showPrefixEl) syncPrefixVisibility(); else updatePreview(); });
+      el.addEventListener('change', ()=> { if(el===showPrefixEl) syncPrefixVisibility(); else updatePreview(); });
     });
 
     copyBtn.addEventListener('click', copyPreview);
     generateBtn.addEventListener('click', () => { updatePreview(); copyPreview(); });
 
     clearBtn.addEventListener('click', () => {
+      showPrefixEl.checked = true;
       prefixEl.value = 'CD';
       letterEl.value = 'G';
       numEl.value = 21;
       weaponEl.value = 'سلاح';
       customEl.value = '';
-      updatePreview();
+      syncPrefixVisibility();
     });
 
-    updatePreview();
+    // initial render
+    syncPrefixVisibility();
   </script>
 </body>
 </html>
-
