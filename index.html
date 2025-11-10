@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>👨🏼‍✈️  مسميات حرس الحدود </title>
+  <title>مولد الاسم التلقائي</title>
   <style>
     :root{
       --bg: #05464C;          /* الخلفية العامة */
@@ -13,14 +13,10 @@
       --glass: rgba(0,0,0,0.18);
       --radius: 16px;
 
-      /* لون الصناديق الافتراضي */
+      /* لون الصناديق الافتراضي (القديم) */
       --field-bg: #759E9A;
       --field-text: #0b1e1f;
       --field-border: rgba(0,0,0,0.25);
-
-      /* اللون الأزرق المطلوب للقوائم المحددة */
-      --blue-bg: #2596be;
-      --blue-text: #ffffff;
 
       --focus: #d7c34e;
     }
@@ -69,7 +65,6 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
-    /* صف عمودي لإجبار الحقول واحد تحت الثاني */
     .col{
       display:flex;
       flex-direction:column;
@@ -84,7 +79,7 @@
       margin-bottom:8px;
     }
 
-    /* الحقول الافتراضية */
+    /* الحقول الافتراضية (الألوان القديمة) */
     select, input[type="text"], input[type="number"]{
       appearance:none;
       -webkit-appearance:none;
@@ -103,21 +98,9 @@
       box-shadow:0 0 0 3px rgba(224,202,81,.25);
     }
     select:active, input:active{ transform:scale(.998) }
-
-    /* خيارات داخل القوائم */
     option{ background:#e0ecea; color:#0b1e1f; }
 
-    /* القوائم الزرقاء المطلوبة */
-    .blue{
-      background: var(--blue-bg) !important;
-      color: var(--blue-text) !important;
-      border-color: rgba(0,0,0,0.2);
-    }
-    .blue option{
-      background:#e6f2f6; color:#0c2a33;
-    }
-
-    /* للأرقام والأكواد نخلي الاتجاه LTR داخل الحقل */
+    /* للأرقام والأكواد LTR */
     .ltr{ direction:ltr; text-align:left }
 
     .grow{flex:1 1 220px; min-width:180px}
@@ -208,13 +191,13 @@
 </head>
 <body>
   <div class="card" role="main" aria-label="مولد الاسم التلقائي">
-    <h1> 👨🏼‍✈️ مسميات حرس الحدود 👨🏼‍✈️ </h1>
+    <h1>مولد الاسم التلقائي — سلس ومرتب</h1>
 
     <!-- الصف الأول -->
     <div class="row">
       <div id="prefixBlock">
         <label for="prefix">البادئة</label>
-        <select id="prefix" class="ltr blue" aria-label="البادئة">
+        <select id="prefix" class="ltr" aria-label="البادئة">
           <option value="CD" selected>CD</option>
           <option value="CC">CC</option>
           <option value="CB">CB</option>
@@ -232,7 +215,7 @@
 
       <div>
         <label for="letter">اختر كود قطاعك</label>
-        <select id="letter" class="ltr blue" aria-label="كود القطاع">
+        <select id="letter" class="ltr" aria-label="كود القطاع">
           <option value="R">R</option>
           <option value="H">H</option>
           <option value="P">P</option>
@@ -244,7 +227,6 @@
 
       <div class="grow">
         <label for="number">اكتب رقم كودك</label>
-        <!-- بدون قيمة ابتدائية؛ يجب على المستخدم الكتابة -->
         <input id="number" type="number" min="0" max="999" class="ltr" placeholder="أدخل رقمك" />
       </div>
     </div>
@@ -253,7 +235,7 @@
     <div class="col">
       <div>
         <label for="weapon">اختر توجيهك</label>
-        <select id="weapon" dir="rtl" class="blue" aria-label="التوجيه">
+        <select id="weapon" dir="rtl" aria-label="التوجيه">
           <option value="سلاح">سلاح</option>
           <option value="حـد">حـد</option>
           <option value="شاهين">شاهين</option>
@@ -270,9 +252,18 @@
         </select>
       </div>
 
+      <!-- القائمة الشرطية: ساندي/جزيرة بوليتو -->
+      <div id="locationBlock" style="display:none;">
+        <label for="locationSel">اختر الموقع</label>
+        <select id="locationSel" aria-label="الموقع">
+          <option value="س.ش">ساندي</option>
+          <option value="ج.ب">جزيرة بوليتو</option>
+        </select>
+      </div>
+
       <div>
         <label for="customLabel">رقم توزيعك</label>
-        <input id="customLabel" type="text" class="ltr" placeholder="مثال: 12" />
+        <input id="customLabel" type="text" class="ltr" placeholder="مثال: 1" />
       </div>
     </div>
 
@@ -301,17 +292,27 @@
     const numEl = document.getElementById('number');
     const weaponEl = document.getElementById('weapon');
     const customEl = document.getElementById('customLabel');
+    const locationBlock = document.getElementById('locationBlock');
+    const locationSel = document.getElementById('locationSel');
     const previewEl = document.getElementById('preview');
     const copyBtn = document.getElementById('copyBtn');
     const generateBtn = document.getElementById('generateBtn');
     const clearBtn = document.getElementById('clearBtn');
     const copiedBadge = document.getElementById('copiedBadge');
 
+    const NEED_LOCATION = new Set(['سيف','رمح','نجم']);
+
     function padNumber(n){
-      if(n === "" || n === null || typeof n === "undefined") return "___"; // اتركه فارغ حتى يكتب المستخدم
+      if(n === "" || n === null || typeof n === "undefined") return "___";
       const num = parseInt(n,10);
       if (isNaN(num) || num < 0) return "___";
       return String(num).padStart(3,'0');
+    }
+
+    function syncLocationVisibility(){
+      const needs = NEED_LOCATION.has(weaponEl.value);
+      locationBlock.style.display = needs ? '' : 'none';
+      if(!needs){ locationSel.value = ''; } // إلغاء الاختيار إذا لم يعد مطلوبًا
     }
 
     function buildLabel(){
@@ -322,12 +323,19 @@
       const weapon = (weaponEl.value || '').trim();
       const custom = (customEl.value || '').trim();
 
+      // داخل الأقواس
       const inside = usePrefix ? `${prefix} | ${letter}-${number}` : `${letter}-${number}`;
-      const main = `| [ ${inside} ] ${weapon}`;
-      return custom ? `${main} ${custom}` : main;
+
+      // نص التوجيه + رقم التوزيع + كود الموقع (إن وُجد)
+      const locCode = NEED_LOCATION.has(weapon) && locationSel.value ? ` ${locationSel.value}` : '';
+      const afterWeapon = custom ? ` ${custom}` : '';
+
+      const main = `| [ ${inside} ] ${weapon}${afterWeapon}${locCode}`;
+      return main;
     }
 
     function updatePreview(){
+      syncLocationVisibility();
       previewEl.textContent = buildLabel();
     }
 
@@ -358,9 +366,15 @@
       setTimeout(()=>copiedBadge.classList.remove('show'), 1600);
     }
 
-    [prefixEl, letterEl, numEl, weaponEl, customEl, showPrefixEl].forEach(el=>{
-      el.addEventListener('input', ()=> { if(el===showPrefixEl) syncPrefixVisibility(); else updatePreview(); });
-      el.addEventListener('change', ()=> { if(el===showPrefixEl) syncPrefixVisibility(); else updatePreview(); });
+    [prefixEl, letterEl, numEl, weaponEl, customEl, locationSel, showPrefixEl].forEach(el=>{
+      el.addEventListener('input', ()=> { 
+        if(el===showPrefixEl) syncPrefixVisibility(); 
+        else updatePreview(); 
+      });
+      el.addEventListener('change', ()=> { 
+        if(el===showPrefixEl) syncPrefixVisibility(); 
+        else updatePreview(); 
+      });
     });
 
     copyBtn.addEventListener('click', copyPreview);
@@ -370,9 +384,10 @@
       showPrefixEl.checked = true;
       prefixEl.value = 'CD';
       letterEl.value = 'G';
-      numEl.value = "";              // لا قيمة افتراضية
+      numEl.value = "";               // يعبئه المستخدم
       weaponEl.value = 'سلاح';
       customEl.value = '';
+      locationSel.value = 'س.ش';
       syncPrefixVisibility();
     });
 
