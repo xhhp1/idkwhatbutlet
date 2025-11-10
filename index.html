@@ -3,21 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>مولد الاسم التلقائي</title>
+  <title>👨🏼‍✈️  مسميات حرس الحدود </title>
   <style>
     :root{
-      --bg: #05464C;          /* لون الخلفية */
-      --panel: rgba(255,255,255,0.06);
+      --bg: #05464C;          /* الخلفية العامة */
       --accent: #e0ca51;
       --text: #ffffff;
       --muted: rgba(255,255,255,0.85);
       --glass: rgba(0,0,0,0.18);
       --radius: 16px;
 
-      /* حقول إدخال ملوّنة */
-      --field-bg: #759E9A;    /* طلبت جعل كل الصناديق بهذا اللون */
-      --field-text: #0b1e1f;  /* نص غامق ليظهر بوضوح */
+      /* لون الصناديق الافتراضي */
+      --field-bg: #759E9A;
+      --field-text: #0b1e1f;
       --field-border: rgba(0,0,0,0.25);
+
+      /* اللون الأزرق المطلوب للقوائم المحددة */
+      --blue-bg: #2596be;
+      --blue-text: #ffffff;
+
       --focus: #d7c34e;
     }
 
@@ -65,6 +69,13 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
+    /* صف عمودي لإجبار الحقول واحد تحت الثاني */
+    .col{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-bottom:14px;
+    }
 
     label{
       display:block;
@@ -73,7 +84,7 @@
       margin-bottom:8px;
     }
 
-    /* الحقول والقوائم */
+    /* الحقول الافتراضية */
     select, input[type="text"], input[type="number"]{
       appearance:none;
       -webkit-appearance:none;
@@ -85,7 +96,7 @@
       font-size:15px;
       min-width:140px;
       outline:none;
-      transition:border .15s ease, box-shadow .15s ease, transform .05s ease, background .15s ease;
+      transition:border .15s ease, box-shadow .15s ease, transform .05s ease, background .15s ease, color .15s ease;
     }
     select:focus, input:focus{
       border-color:var(--focus);
@@ -93,10 +104,17 @@
     }
     select:active, input:active{ transform:scale(.998) }
 
-    /* لضمان ألوان عناصر القائمة */
-    option{
-      background:#e0ecea;     /* درجة فاتحة تناسب الـ #759E9A */
-      color:#0b1e1f;
+    /* خيارات داخل القوائم */
+    option{ background:#e0ecea; color:#0b1e1f; }
+
+    /* القوائم الزرقاء المطلوبة */
+    .blue{
+      background: var(--blue-bg) !important;
+      color: var(--blue-text) !important;
+      border-color: rgba(0,0,0,0.2);
+    }
+    .blue option{
+      background:#e6f2f6; color:#0c2a33;
     }
 
     /* للأرقام والأكواد نخلي الاتجاه LTR داخل الحقل */
@@ -190,13 +208,13 @@
 </head>
 <body>
   <div class="card" role="main" aria-label="مولد الاسم التلقائي">
-    <h1>مولد الاسم التلقائي — سلس ومرتب</h1>
+    <h1> 👨🏼‍✈️ مسميات حرس الحدود 👨🏼‍✈️ </h1>
 
     <!-- الصف الأول -->
     <div class="row">
       <div id="prefixBlock">
         <label for="prefix">البادئة</label>
-        <select id="prefix" class="ltr" aria-label="البادئة">
+        <select id="prefix" class="ltr blue" aria-label="البادئة">
           <option value="CD" selected>CD</option>
           <option value="CC">CC</option>
           <option value="CB">CB</option>
@@ -214,7 +232,7 @@
 
       <div>
         <label for="letter">اختر كود قطاعك</label>
-        <select id="letter" class="ltr" aria-label="كود القطاع">
+        <select id="letter" class="ltr blue" aria-label="كود القطاع">
           <option value="R">R</option>
           <option value="H">H</option>
           <option value="P">P</option>
@@ -226,15 +244,16 @@
 
       <div class="grow">
         <label for="number">اكتب رقم كودك</label>
-        <input id="number" type="number" min="0" max="999" value="21" class="ltr" />
+        <!-- بدون قيمة ابتدائية؛ يجب على المستخدم الكتابة -->
+        <input id="number" type="number" min="0" max="999" class="ltr" placeholder="أدخل رقمك" />
       </div>
     </div>
 
-    <!-- الصف الثاني -->
-    <div class="row">
-      <div class="grow">
+    <!-- التوجيه ثم رقم التوزيع تحته مباشرة -->
+    <div class="col">
+      <div>
         <label for="weapon">اختر توجيهك</label>
-        <select id="weapon" dir="rtl" aria-label="التوجيه">
+        <select id="weapon" dir="rtl" class="blue" aria-label="التوجيه">
           <option value="سلاح">سلاح</option>
           <option value="حـد">حـد</option>
           <option value="شاهين">شاهين</option>
@@ -251,7 +270,7 @@
         </select>
       </div>
 
-      <div class="grow">
+      <div>
         <label for="customLabel">رقم توزيعك</label>
         <input id="customLabel" type="text" class="ltr" placeholder="مثال: 12" />
       </div>
@@ -265,7 +284,7 @@
 
     <!-- المعاينة -->
     <div class="preview" aria-live="polite">
-      <div class="preview-text" id="preview">| [ CD | G-021 ] سلاح</div>
+      <div class="preview-text" id="preview">| [ CD | G-___ ] سلاح</div>
       <div style="display:flex;align-items:center;">
         <button class="btn" id="copyBtn">نسخ</button>
         <span class="copied" id="copiedBadge">✓ تم النسخ</span>
@@ -288,10 +307,10 @@
     const clearBtn = document.getElementById('clearBtn');
     const copiedBadge = document.getElementById('copiedBadge');
 
-    // 3 digits pad
     function padNumber(n){
+      if(n === "" || n === null || typeof n === "undefined") return "___"; // اتركه فارغ حتى يكتب المستخدم
       const num = parseInt(n,10);
-      if (isNaN(num) || num < 0) return '000';
+      if (isNaN(num) || num < 0) return "___";
       return String(num).padStart(3,'0');
     }
 
@@ -303,11 +322,7 @@
       const weapon = (weaponEl.value || '').trim();
       const custom = (customEl.value || '').trim();
 
-      // داخل الأقواس المربعة
-      // إذا كانت البادئة مفعّلة: "PREFIX | LETTER-NNN"
-      // إذا غير مفعّلة: "LETTER-NNN" فقط
       const inside = usePrefix ? `${prefix} | ${letter}-${number}` : `${letter}-${number}`;
-
       const main = `| [ ${inside} ] ${weapon}`;
       return custom ? `${main} ${custom}` : main;
     }
@@ -355,7 +370,7 @@
       showPrefixEl.checked = true;
       prefixEl.value = 'CD';
       letterEl.value = 'G';
-      numEl.value = 21;
+      numEl.value = "";              // لا قيمة افتراضية
       weaponEl.value = 'سلاح';
       customEl.value = '';
       syncPrefixVisibility();
@@ -366,4 +381,3 @@
   </script>
 </body>
 </html>
-
