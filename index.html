@@ -13,245 +13,381 @@
       --glass: rgba(0,0,0,0.18);
       --radius: 16px;
 
+      /* fields */
       --field-bg: #759E9A;
       --field-text: #0b1e1f;
       --field-border: rgba(0,0,0,0.25);
-
       --focus: #d7c34e;
       --invalid: #ffcdcd;
       --invalid-border: #d44949;
+
+      /* NEW: 25% larger text & yellow stroke for text inside boxes */
+      --field-font-size: 19px; /* 15px × 1.25 ≈ 18.75 */
+      --stroke-color: #FFD84D;
+      --stroke-w: 0.6px; /* subtle */
+      --stroke-shadow: 
+        -0.6px 0 var(--stroke-color),
+         0.6px 0 var(--stroke-color),
+         0 -0.6px var(--stroke-color),
+         0  0.6px var(--stroke-color),
+        -0.6px -0.6px var(--stroke-color),
+         0.6px -0.6px var(--stroke-color),
+        -0.6px  0.6px var(--stroke-color),
+         0.6px  0.6px var(--stroke-color);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0; padding:28px;
-      font-family: "Tahoma", sans-serif;
-      background:var(--bg); color:var(--text);
+      font-family: "Tahoma", "Arial", sans-serif;
+      background: var(--bg); color:var(--text);
       display:flex; align-items:center; justify-content:center;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
     .card{
       width:100%; max-width:820px;
       background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08));
       border-radius:var(--radius); padding:24px;
-      box-shadow:0 14px 36px rgba(0,0,0,0.45);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.45);
       border:1px solid rgba(255,255,255,0.05);
+      backdrop-filter: blur(4px);
+      transition: transform .2s ease;
     }
+    .card:hover{ transform:translateY(-1px) }
 
     h1{ margin:0 0 16px; font-size:22px; color:var(--accent); text-align:center; }
 
-    .row{ display:flex; gap:14px; flex-wrap:wrap; justify-content:flex-end; align-items:flex-end; margin-bottom:14px; }
+    .row{
+      display:flex; gap:14px; align-items:flex-end; margin-bottom:14px;
+      flex-wrap:wrap; justify-content:flex-end;
+    }
     .col{ display:flex; flex-direction:column; gap:14px; margin-bottom:14px; }
 
-    label{ font-size:13px; margin-bottom:6px; color:var(--muted); }
+    label{ display:block; font-size:13px; color:var(--muted); margin-bottom:8px; }
 
-    select,input{
+    /* inputs & selects */
+    select, input[type="text"], input[type="number"]{
+      appearance:none; -webkit-appearance:none;
       background:var(--field-bg); color:var(--field-text);
       border:1px solid var(--field-border);
-      padding:11px 12px; border-radius:12px; font-size:15px;
-      outline:none; min-width:140px;
+      padding:12px 14px; border-radius:12px;
+      font-size: var(--field-font-size);            /* 25% larger */
+      min-width:140px; outline:none;
+      transition:border .15s ease, box-shadow .15s ease, transform .05s ease;
+      /* Yellow stroke look */
+      -webkit-text-stroke: var(--stroke-w) var(--stroke-color);
+      text-shadow: var(--stroke-shadow);
     }
+    /* Some UAs ignore stroke on <option>; still helps on the closed control text */
+    option{
+      background:#e0ecea; color:#0b1e1f;
+      -webkit-text-stroke: var(--stroke-w) var(--stroke-color);
+      text-shadow: var(--stroke-shadow);
+      font-size: var(--field-font-size);
+    }
+
+    /* placeholders */
+    input::placeholder{
+      color:#0b1e1f;
+      opacity:.8;
+      -webkit-text-stroke: var(--stroke-w) var(--stroke-color);
+      text-shadow: var(--stroke-shadow);
+    }
+
+    select:focus, input:focus{ border-color:var(--focus); box-shadow:0 0 0 3px rgba(224,202,81,.25); }
+    select:active, input:active{ transform:scale(.998) }
 
     .ltr{ direction:ltr; text-align:left }
     .grow{ flex:1 1 220px; min-width:180px }
 
-    .switch{ display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; }
+    .switch{ display:flex; align-items:center; gap:8px; user-select:none; cursor:pointer; font-size:13px; color:var(--muted); }
     .switch input{ display:none; }
     .toggle{
-      width:42px; height:24px; border-radius:999px; background:#86b6b1; position:relative; transition:.2s;
+      width:42px; height:24px; border-radius:999px; background:#86b6b1; position:relative;
+      border:1px solid var(--field-border); transition:.2s;
     }
     .toggle::after{
-      content:""; position:absolute; top:2px; right:2px; width:20px; height:20px;
-      background:#fff; border-radius:50%; transition:.2s;
+      content:""; position:absolute; top:2px; right:2px; width:20px; height:20px; border-radius:50%;
+      background:#fff; transition:.2s; box-shadow:0 1px 3px rgba(0,0,0,.25);
     }
     .switch input:checked + .toggle{ background:#c9d7d5; }
     .switch input:checked + .toggle::after{ right:20px; }
 
-    .slot-fixed{ width:220px; }
+    .preview{
+      margin-top:6px; background:var(--glass); border-radius:12px; padding:14px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      border:1px solid rgba(255,255,255,0.06);
+    }
+    .preview-text{ font-family: "Tahoma", sans-serif; font-size:18px; color:var(--text); white-space:nowrap; direction:rtl; }
+
+    .actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:12px; justify-content:flex-end; }
+    .btn{
+      background:var(--accent); color:#111; border:none; padding:11px 16px; border-radius:12px; font-weight:700; cursor:pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35); transition: transform .08s ease, box-shadow .15s ease, filter .15s ease;
+    }
+    .btn:hover{ filter:brightness(1.03); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .btn:active{ transform:translateY(1px) }
+    .btn.secondary{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.1); font-weight:600; }
+
+    .slot-fixed{ width: 220px; }
     .hidden-keep{ visibility:hidden; pointer-events:none; }
 
-    .preview{
-      background:var(--glass);
-      border-radius:12px; padding:14px;
-      border:1px solid rgba(255,255,255,0.06);
-      white-space:nowrap; text-align:right; direction:rtl;
-      font-size:18px; font-family:"Tahoma";
-    }
+    .invalid{ background: var(--invalid) !important; border-color: var(--invalid-border) !important; }
 
-    .copy-indicator{
-      opacity:0; text-align:center; margin-top:6px;
-      color:#f0ffda; font-size:14px; transition:.4s ease;
+    @media (max-width:560px){
+      .row{ justify-content:stretch; }
+      .preview{ flex-direction:column; align-items:flex-end; gap:8px; }
+      .preview-text{ font-size:17px; }
+      .slot-fixed{ width:100%; }
     }
-    .copy-indicator.show{ opacity:1; }
-
-    .actions{ display:flex; justify-content:flex-end; gap:12px; margin-top:12px; }
-    .btn{
-      background:var(--accent); color:#111;
-      padding:11px 16px; border:none; border-radius:12px;
-      font-weight:700; cursor:pointer;
-    }
-    .btn.secondary{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,.15); }
-
-    .invalid{ background:var(--invalid)!important; border-color:var(--invalid-border)!important; }
   </style>
 </head>
 <body>
-<div class="card">
+  <div class="card" role="main" aria-label="مسميات حرس الحدود">
+    <h1>مسميات حرس الحدود</h1>
 
-<h1>مسميات حرس الحدود</h1>
+    <!-- الصف الأول -->
+    <div class="row">
+      <div>
+        <label for="letter">اختر كود قطاعك</label>
+        <select id="letter" class="ltr" aria-label="كود القطاع">
+          <option value="" selected disabled hidden>— اختر —</option>
+          <option value="R">R</option>
+          <option value="H">H</option>
+          <option value="P">P</option>
+          <option value="G">G</option>
+          <option value="E">E</option>
+          <option value="M">M</option>
+        </select>
+      </div>
 
-<!-- الصف الأول -->
-<div class="row">
-  <div>
-    <label>اختر كود قطاعك</label>
-    <select id="letter" class="ltr">
-      <option value="" disabled selected hidden>— اختر —</option>
-      <option>R</option><option>H</option><option>P</option><option>G</option><option>E</option><option>M</option>
-    </select>
-  </div>
+      <div class="grow">
+        <label for="number">اكتب رقم كودك</label>
+        <input id="number" type="number" min="0" max="999" class="ltr" placeholder="أدخل رقمك" />
+      </div>
 
-  <div class="grow">
-    <label>اكتب رقم كودك</label>
-    <input id="number" type="number" class="ltr" placeholder="أدخل رقمك">
-  </div>
+      <div>
+        <label class="switch" title="إظهار/إخفاء كود المعتمد">
+          <input id="showPrefix" type="checkbox" />
+          <span class="toggle"></span>
+          <span>إظهار كود المعتمد</span>
+        </label>
+      </div>
 
-  <div>
-    <label class="switch"><input id="showPrefix" type="checkbox"><span class="toggle"></span>كود المعتمد</label>
-  </div>
-  <div>
-    <label class="switch"><input id="snooze" type="checkbox"><span class="toggle"></span>غفوة</label>
-  </div>
+      <div>
+        <label class="switch" title="تفعيل غفوة">
+          <input id="snooze" type="checkbox" />
+          <span class="toggle"></span>
+          <span>غفوة</span>
+        </label>
+      </div>
 
-  <div id="prefixBlock" class="slot-fixed hidden-keep">
-    <label>كود المعتمد</label>
-    <select id="prefix" class="ltr">
-      <option>CD</option><option>CC</option><option>CB</option><option>CA</option>
-    </select>
-  </div>
-</div>
-
-<!-- التوجيه -->
-<div class="col">
-  <div class="row" style="margin-bottom:0;">
-    <div class="grow">
-      <label>اختر توجيهك</label>
-      <select id="weapon">
-        <option value="" disabled selected hidden>— اختر —</option>
-        <option>سلاح</option><option>حـد</option><option>شاهين</option><option>ردع</option><option>شهاب</option>
-        <option>سيف</option><option>رمح</option><option>نجم</option><option>حرس</option>
-        <option>شرطة عسكرية</option><option>رقيب خفر</option><option>ضابط خف</option><option>سجن</option>
-      </select>
+      <div id="prefixBlock" class="slot-fixed hidden-keep">
+        <label for="prefix">كود المعتمد</label>
+        <select id="prefix" class="ltr" aria-label="كود المعتمد">
+          <option value="CD" selected>CD</option>
+          <option value="CC">CC</option>
+          <option value="CB">CB</option>
+          <option value="CA">CA</option>
+        </select>
+      </div>
     </div>
 
-    <div id="locationBlock" style="display:none;">
-      <label>اختر الموقع</label>
-      <select id="locationSel">
-        <option value="" disabled selected hidden>— اختر —</option>
-        <option value="س.ش">ساندي</option>
-        <option value="ج.ب">جزيرة بوليتو</option>
-      </select>
+    <!-- التوجيه + الموقع المشروط + مشتركة + رقم التوزيع -->
+    <div class="col">
+      <div class="row" style="margin-bottom:0;">
+        <div class="grow">
+          <label for="weapon">اختر توجيهك</label>
+          <select id="weapon" dir="rtl" aria-label="التوجيه">
+            <option value="" selected disabled hidden>— اختر —</option>
+            <option value="سلاح">سلاح</option>
+            <option value="حـد">حـد</option>
+            <option value="شاهين">شاهين</option>
+            <option value="ردع">ردع</option>
+            <option value="شهاب">شهاب</option>
+            <option value="سيف">سيف</option>
+            <option value="رمح">رمح</option>
+            <option value="نجم">نجم</option>
+            <option value="حرس">حرس</option>
+            <option value="شرطة عسكرية">شرطة عسكرية</option>
+            <option value="رقيب خفر">رقيب خفر</option>
+            <option value="ضابط خف">ضابط خف</option>
+            <option value="سجن">سجن</option>
+          </select>
+        </div>
+
+        <div id="locationBlock" style="display:none;">
+          <label for="locationSel">اختر الموقع</label>
+          <select id="locationSel" aria-label="الموقع">
+            <option value="" selected disabled hidden>— اختر —</option>
+            <option value="س.ش">ساندي</option>
+            <option value="ج.ب">جزيرة بوليتو</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="switch" title="تفعيل مشتركة">
+            <input id="joint" type="checkbox" />
+            <span class="toggle"></span>
+            <span>مشتركة</span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label for="customLabel">رقم توزيعك</label>
+        <input id="customLabel" type="text" class="ltr" placeholder="مثال: 1" />
+      </div>
     </div>
 
-    <div>
-      <label class="switch"><input id="joint" type="checkbox"><span class="toggle"></span>مشتركة</label>
+    <!-- المعاينة -->
+    <div class="preview" aria-live="polite">
+      <div class="preview-text" id="preview">| [ ? | ?-___ ] —</div>
+    </div>
+
+    <!-- الأزرار -->
+    <div class="actions">
+      <button class="btn" id="generateBtn">عرض ونسخ</button>
+      <button class="btn secondary" id="clearBtn">إعادة ضبط</button>
     </div>
   </div>
 
-  <div>
-    <label>رقم توزيعك</label>
-    <input id="customLabel" class="ltr" placeholder="مثال: 1">
-  </div>
-</div>
+  <script>
+    const prefixEl = document.getElementById('prefix');
+    const prefixBlock = document.getElementById('prefixBlock');
+    const showPrefixEl = document.getElementById('showPrefix');
+    const letterEl = document.getElementById('letter');
+    const numEl = document.getElementById('number');
+    const weaponEl = document.getElementById('weapon');
+    const customEl = document.getElementById('customLabel');
+    const locationBlock = document.getElementById('locationBlock');
+    const locationSel = document.getElementById('locationSel');
+    const snoozeEl = document.getElementById('snooze');
+    const jointEl = document.getElementById('joint');
 
-<!-- النتيجة -->
-<div id="preview" class="preview">| [ ? | ?-___ ] —</div>
-<div id="copyNote" class="copy-indicator">✓ تم النسخ</div>
+    const previewEl = document.getElementById('preview');
+    const generateBtn = document.getElementById('generateBtn');
+    const clearBtn = document.getElementById('clearBtn');
 
-<!-- الأزرار -->
-<div class="actions">
-  <button class="btn" id="generateBtn">عرض ونسخ</button>
-  <button class="btn secondary" id="clearBtn">إعادة ضبط</button>
-</div>
+    const NEED_LOCATION = new Set(['سيف','رمح','نجم']);
 
-</div>
+    function padNumber(n){
+      if(n === "" || n === null || typeof n === "undefined") return "___";
+      const num = parseInt(n,10);
+      if (isNaN(num) || num < 0) return "___";
+      return String(num).padStart(3,'0');
+    }
 
-<script>
-const prefixEl=document.getElementById("prefix");
-const prefixBlock=document.getElementById("prefixBlock");
-const showPrefixEl=document.getElementById("showPrefix");
-const letterEl=document.getElementById("letter");
-const numEl=document.getElementById("number");
-const weaponEl=document.getElementById("weapon");
-const customEl=document.getElementById("customLabel");
-const locationBlock=document.getElementById("locationBlock");
-const locationSel=document.getElementById("locationSel");
-const snoozeEl=document.getElementById("snooze");
-const jointEl=document.getElementById("joint");
-const preview=document.getElementById("preview");
-const note=document.getElementById("copyNote");
-const NEED_LOCATION=new Set(["سيف","رمح","نجم"]);
+    function syncPrefixVisibility(){
+      if(showPrefixEl.checked){
+        prefixBlock.classList.remove('hidden-keep');
+      }else{
+        prefixBlock.classList.add('hidden-keep');
+      }
+      updatePreview();
+    }
 
-function showCopyNote(){
-  note.classList.add("show");
-  setTimeout(()=>note.classList.remove("show"),1200);
-}
+    function syncLocationVisibility(){
+      const needs = NEED_LOCATION.has(weaponEl.value);
+      locationBlock.style.display = needs ? '' : 'none';
+      if(!needs){ locationSel.value = ''; }
+    }
 
-function pad(n){
-  if(n===""||n==null) return "___";
-  n=parseInt(n); if(isNaN(n)) return "___";
-  return String(n).padStart(3,"0");
-}
+    function buildLabel(){
+      const prefixOn = showPrefixEl.checked;
+      const prefix = (prefixEl.value || 'CD').trim();
+      const letter = (letterEl.value || '?').trim();
+      const number = padNumber(numEl.value);
+      const weapon = (weaponEl.value || '—').trim();
+      const custom = (customEl.value || '').trim();
 
-function syncPrefix(){
-  prefixBlock.classList.toggle("hidden-keep",!showPrefixEl.checked);
-}
+      const locCode = NEED_LOCATION.has(weapon) && locationSel.value ? ` ${locationSel.value}` : '';
+      const snooze = snoozeEl.checked ? ' غفوة' : '';
+      const joint = jointEl.checked ? 'م ' : ''; // مشتركة: تضيف "م " قبل التوجيه
 
-function syncLocation(){
-  locationBlock.style.display=NEED_LOCATION.has(weaponEl.value)?"":"none";
-  if(!NEED_LOCATION.has(weaponEl.value)) locationSel.value="";
-}
+      const inside = prefixOn ? `${prefix} | ${letter}-${number}` : `${letter}-${number}`;
+      return `| [ ${inside} ] ${joint}${weapon}${custom ? ` ${custom}`:''}${locCode}${snooze}`;
+    }
 
-function build(){
-  const pfx=showPrefixEl.checked?`${prefixEl.value} | `:"";
-  const code=`${letterEl.value||"?"}-${pad(numEl.value)}`;
-  const w=weaponEl.value||"—";
-  const dist=customEl.value?` ${customEl.value}`:"";
-  const loc=NEED_LOCATION.has(w)&&locationSel.value?` ${locationSel.value}`:"";
-  const joint=jointEl.checked?"م ":"";
-  const snooze=snoozeEl.checked?" غفوة":"";
-  return `| [ ${pfx}${code} ] ${joint}${w}${dist}${loc}${snooze}`;
-}
+    function updatePreview(){
+      syncLocationVisibility();
+      previewEl.textContent = buildLabel();
+    }
 
-function update(){ syncPrefix(); syncLocation(); preview.textContent=build(); }
+    function markInvalid(el, flag){
+      if(flag) el.classList.add('invalid');
+      else el.classList.remove('invalid');
+    }
 
-function validate(){
-  let ok=true;
-  if(!letterEl.value){letterEl.classList.add("invalid"); ok=false;}else letterEl.classList.remove("invalid");
-  if(!numEl.value){numEl.classList.add("invalid"); ok=false;}else numEl.classList.remove("invalid");
-  if(!weaponEl.value){weaponEl.classList.add("invalid"); ok=false;}else weaponEl.classList.remove("invalid");
-  if(NEED_LOCATION.has(weaponEl.value)&&!locationSel.value){locationSel.classList.add("invalid"); ok=false;}else locationSel.classList.remove("invalid");
-  return ok;
-}
+    function validate(){
+      let ok = true;
+      const letterMissing = !letterEl.value;
+      markInvalid(letterEl, letterMissing); ok = ok && !letterMissing;
 
-async function copy(){
-  navigator.clipboard.writeText(build()).catch(()=>{
-    const t=document.createElement("textarea");
-    t.value=build(); document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove();
-  });
-  showCopyNote();
-}
+      const numberMissing = (numEl.value === "" || isNaN(parseInt(numEl.value,10)));
+      markInvalid(numEl, numberMissing); ok = ok && !numberMissing;
 
-document.querySelectorAll("select,input").forEach(el=>el.addEventListener("input",update));
-generateBtn.onclick=()=>{ if(validate()) copy(); };
-clearBtn.onclick=()=>{
-  letterEl.value=""; numEl.value=""; weaponEl.value="";
-  customEl.value=""; locationSel.value=""; snoozeEl.checked=false; jointEl.checked=false;
-  showPrefixEl.checked=false; syncPrefix(); update();
-};
+      const weaponMissing = !weaponEl.value;
+      markInvalid(weaponEl, weaponMissing); ok = ok && !weaponMissing;
 
-update();
-</script>
+      const needLoc = NEED_LOCATION.has(weaponEl.value);
+      const locMissing = needLoc && !locationSel.value;
+      if(needLoc) markInvalid(locationSel, locMissing); else markInvalid(locationSel, false);
+      ok = ok && !(needLoc && locMissing);
+
+      return ok;
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        // No alert as requested
+      }catch(e){
+        // Silent fallback (no alert)
+        const tmp = document.createElement('textarea');
+        tmp.value = text; document.body.appendChild(tmp); tmp.select();
+        try{ document.execCommand('copy'); } catch{}
+        tmp.remove();
+      }
+    }
+
+    [prefixEl, letterEl, numEl, weaponEl, customEl, locationSel, snoozeEl, jointEl, showPrefixEl]
+      .forEach(el=>{
+        el.addEventListener('input', ()=> { if(el===showPrefixEl) syncPrefixVisibility(); else updatePreview(); });
+        el.addEventListener('change', ()=> { if(el===showPrefixEl) syncPrefixVisibility(); else updatePreview(); });
+      });
+
+    generateBtn.addEventListener('click', () => {
+      if(!validate()){
+        updatePreview();
+        alert('يرجى اختيار كود القطاع والتوجيه وكتابة رقم الكود.\nإن اخترت سيف/رمح/نجم يجب اختيار الموقع.');
+        return;
+      }
+      copyText(buildLabel());
+    });
+
+    clearBtn.addEventListener('click', () => {
+      showPrefixEl.checked = false;
+      prefixEl.value = 'CD';
+      letterEl.value = '';
+      numEl.value = '';
+      weaponEl.value = '';
+      customEl.value = '';
+      locationSel.value = '';
+      snoozeEl.checked = false;
+      jointEl.checked = false;
+
+      [letterEl, numEl, weaponEl, locationSel].forEach(el=>el.classList.remove('invalid'));
+
+      syncPrefixVisibility();
+      updatePreview();
+    });
+
+    // init
+    syncPrefixVisibility();
+    updatePreview();
+  </script>
 </body>
 </html>
-
