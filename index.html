@@ -12,7 +12,12 @@
       --text: #fff;
       --muted: rgba(255,255,255,0.85);
       --glass: rgba(0,0,0,0.18);
-      --radius: 14px;
+      --radius: 16px;
+      /* حقول فاتحة لظهور القوائم بوضوح */
+      --field-bg: #fff;
+      --field-text: #111;
+      --field-border: rgba(0,0,0,0.15);
+      --focus: #d7c34e;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -31,26 +36,30 @@
 
     .card{
       width:100%;
-      max-width:760px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+      max-width:780px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.08));
       border-radius:var(--radius);
-      padding:22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-      border:1px solid rgba(255,255,255,0.04);
+      padding:24px;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.45);
+      border:1px solid rgba(255,255,255,0.05);
+      backdrop-filter: blur(5px);
+      transition: transform .2s ease;
     }
+    .card:hover{ transform:translateY(-1px) }
 
     h1{
-      margin:0 0 14px;
-      font-size:20px;
+      margin:0 0 16px;
+      font-size:22px;
       color:var(--accent);
       text-align:center;
+      letter-spacing:.3px;
     }
 
     .row{
       display:flex;
-      gap:12px;
-      align-items:center;
-      margin-bottom:12px;
+      gap:14px;
+      align-items:flex-end;
+      margin-bottom:14px;
       flex-wrap:wrap;
       justify-content:flex-end;
     }
@@ -59,25 +68,39 @@
       display:block;
       font-size:13px;
       color:var(--muted);
-      margin-bottom:6px;
+      margin-bottom:8px;
     }
 
+    /* حقول بإضاءة (خلفية فاتحة ونص غامق) لظهور القوائم */
     select, input[type="text"], input[type="number"]{
       appearance:none;
       -webkit-appearance:none;
-      background:var(--panel);
-      border:1px solid rgba(0,0,0,0.2);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:10px;
+      background:var(--field-bg);
+      color:var(--field-text);
+      border:1px solid var(--field-border);
+      padding:11px 12px;
+      border-radius:12px;
       font-size:15px;
-      min-width:120px;
-      direction:ltr; /* keep number/letter inputs left-to-right visually */
+      min-width:140px;
+      outline:none;
+      transition:border .15s ease, box-shadow .15s ease, transform .05s ease;
+    }
+    select:focus, input:focus{
+      border-color:var(--focus);
+      box-shadow:0 0 0 3px rgba(224,202,81,.2);
+    }
+    select:active, input:active{ transform:scale(.998) }
+
+    /* الخيارات داخل القوائم لضمان ظهور اللون */
+    option{
+      background:#ffffff;
+      color:#111111;
     }
 
-    select[dir="rtl"]{ direction: rtl; } /* for dropdown Arabic labels */
+    /* للأرقام والحروف نخلي الاتجاه LTR فقط داخل الحقل */
+    .ltr{ direction:ltr; text-align:left }
 
-    .grow{flex:1 1 200px; min-width:160px}
+    .grow{flex:1 1 220px; min-width:180px}
 
     .controls{
       display:flex;
@@ -88,14 +111,15 @@
     }
 
     .preview{
-      margin-top:16px;
+      margin-top:18px;
       background:var(--glass);
-      border-radius:10px;
+      border-radius:12px;
       padding:14px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
+      border:1px solid rgba(255,255,255,0.06);
     }
 
     .preview-text{
@@ -110,31 +134,25 @@
       background:var(--accent);
       color:#111;
       border:none;
-      padding:10px 14px;
-      border-radius:10px;
-      font-weight:600;
+      padding:11px 16px;
+      border-radius:12px;
+      font-weight:700;
       cursor:pointer;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      transition: transform .08s ease, box-shadow .15s ease, filter .15s ease;
     }
-
+    .btn:hover{ filter:brightness(1.03); box-shadow: 0 10px 24px rgba(0,0,0,0.4); }
+    .btn:active{ transform:translateY(1px) }
     .btn.secondary{
       background:transparent;
       color:var(--muted);
-      border:1px solid rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.1);
+      font-weight:600;
     }
 
     .tiny{
       font-size:12px;
       color:var(--muted);
-    }
-
-    .footer{
-      margin-top:12px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
     }
 
     .copied{
@@ -148,29 +166,33 @@
     }
     .copied.show{ opacity:1; transform:translateY(0) }
 
-    /* mobile */
     @media (max-width:560px){
       .row{ justify-content:stretch; }
       .controls{ justify-content:stretch; }
       .preview{ flex-direction:column; align-items:flex-end; gap:8px; }
+      .preview-text{ font-size:17px; }
     }
   </style>
 </head>
 <body>
   <div class="card" role="main" aria-label="مولد الاسم التلقائي">
-    <h1>مولد الاسم التلقائي — تلقائي وسهل</h1>
+    <h1>مولد الاسم التلقائي — سلس ومرتب</h1>
 
-    <!-- inputs area -->
+    <!-- الصف الأول -->
     <div class="row">
-      <div style="min-width:170px">
-        <label for="prefix">البادئة (مثال: CD)</label>
-        <input id="prefix" type="text" value="CD" placeholder="CD" />
-        <div class="tiny">يمكنك تغييره</div>
+      <div>
+        <label for="prefix">البادئة</label>
+        <select id="prefix" class="ltr" aria-label="البادئة">
+          <option value="CD" selected>CD</option>
+          <option value="CC">CC</option>
+          <option value="CB">CB</option>
+          <option value="CA">CA</option>
+        </select>
       </div>
 
       <div>
         <label for="letter">اختر الحرف</label>
-        <select id="letter" aria-label="حرف">
+        <select id="letter" class="ltr" aria-label="الحرف">
           <option value="R">R</option>
           <option value="H">H</option>
           <option value="P">P</option>
@@ -182,16 +204,17 @@
       </div>
 
       <div class="grow">
-        <label for="number">الرقم (سيصبح 3 خانات)</label>
-        <input id="number" type="number" min="0" max="999" value="21" />
-        <div class="tiny">أدخل الرقم فقط، سيعرض كـ 021</div>
+        <label for="number">الرقم (3 خانات تلقائياً)</label>
+        <input id="number" type="number" min="0" max="999" value="21" class="ltr" />
+        <div class="tiny">أدخل الرقم فقط (يعرض كـ 021)</div>
       </div>
     </div>
 
+    <!-- الصف الثاني -->
     <div class="row">
-      <div style="flex:1">
+      <div class="grow">
         <label for="weapon">اختر من القائمة</label>
-        <select id="weapon" dir="rtl" aria-label="قائمة الاختيارات">
+        <select id="weapon" dir="rtl" aria-label="القائمة العربية">
           <option value="سلاح">سلاح</option>
           <option value="حـد">حـد</option>
           <option value="شاهين">شاهين</option>
@@ -207,33 +230,28 @@
         </select>
       </div>
 
-      <div style="min-width:220px">
+      <div class="grow">
         <label for="customLabel">نص إضافي (اختياري)</label>
         <input id="customLabel" type="text" placeholder="مثال: اسم أو وصف" />
-        <div class="tiny">سيمكنك إضافة كلمة بعد اسم الاختيار إذا أردت</div>
+        <div class="tiny">يمكنك إضافة كلمة بعد الاختيار</div>
       </div>
     </div>
 
-    <!-- controls -->
+    <!-- الأزرار -->
     <div class="controls">
       <button class="btn" id="generateBtn">عرض ونسخ</button>
       <button class="btn secondary" id="clearBtn">إعادة ضبط</button>
       <div style="flex:1"></div>
-      <div class="tiny">المعاينة تحدث تلقائياً أثناء التعديل</div>
+      <div class="tiny">المعاينة تُحدَّث تلقائياً</div>
     </div>
 
-    <!-- preview -->
+    <!-- المعاينة -->
     <div class="preview" aria-live="polite">
       <div class="preview-text" id="preview">| [ CD | G-021 ] سلاح</div>
       <div style="display:flex;align-items:center;">
         <button class="btn" id="copyBtn">نسخ</button>
         <span class="copied" id="copiedBadge">✓ تم النسخ</span>
       </div>
-    </div>
-
-    <div class="footer tiny">
-      <div>خلفية: <strong>#374F1E</strong></div>
-      <div>إذا أردت تغيير التنسيق أو إضافة أقواس/فواصل أخبرني وسأعدها لك.</div>
     </div>
   </div>
 
@@ -250,43 +268,39 @@
     const clearBtn = document.getElementById('clearBtn');
     const copiedBadge = document.getElementById('copiedBadge');
 
-    // format number to 3 digits
+    // 3 digits
     function padNumber(n){
       const num = parseInt(n,10) || 0;
       if(num < 0) return '000';
       return String(num).padStart(3,'0');
     }
 
-    // build the label
     function buildLabel(){
       const prefix = (prefixEl.value || 'CD').trim();
       const letter = (letterEl.value || 'G').trim();
       const number = padNumber(numEl.value);
       const weapon = (weaponEl.value || '').trim();
       const custom = (customEl.value || '').trim();
-      // final format: | [ PREFIX | LETTER-NNN ] WEAPON {custom}
       const main = `| [ ${prefix} | ${letter}-${number} ] ${weapon}`;
       return custom ? `${main} ${custom}` : main;
     }
 
-    // update preview
     function updatePreview(){
       previewEl.textContent = buildLabel();
     }
 
-    // copy function
     async function copyPreview(){
       const text = buildLabel();
       try{
         await navigator.clipboard.writeText(text);
         showCopied();
       }catch(e){
-        // fallback
         const tmp = document.createElement('textarea');
         tmp.value = text;
         document.body.appendChild(tmp);
         tmp.select();
-        try{ document.execCommand('copy'); showCopied(); } catch(e2){ alert('نسخ فشل — انسخ يدويًا:\n' + text); }
+        try{ document.execCommand('copy'); showCopied(); } 
+        catch(e2){ alert('نسخ فشل — انسخ يدويًا:\n' + text); }
         tmp.remove();
       }
     }
@@ -296,7 +310,6 @@
       setTimeout(()=>copiedBadge.classList.remove('show'), 1600);
     }
 
-    // events
     [prefixEl, letterEl, numEl, weaponEl, customEl].forEach(el=>{
       el.addEventListener('input', updatePreview);
       el.addEventListener('change', updatePreview);
@@ -314,8 +327,8 @@
       updatePreview();
     });
 
-    // initial render
     updatePreview();
   </script>
 </body>
 </html>
+
