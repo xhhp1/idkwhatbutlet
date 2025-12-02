@@ -359,8 +359,8 @@
     <label>تاريخ بدء الاجازة</label>
     <input type="date" id="ext_rec_start">
 
-    <label>تاريخ انتهاء الاجازة</label>
-    <input type="date" id="ext_rec_end">
+    <label>تاريخ انتهاء الاجازة (يُحسب تلقائياً)</label>
+    <input type="text" id="ext_rec_end" placeholder="يتم حسابه من تاريخ البدء + المدة" readonly>
 
     <label>رابط الاجازة</label>
     <input type="text" id="ext_rec_link" placeholder="ضع رابط الاجازة هنا">
@@ -892,7 +892,7 @@ function abs_generate(){
 
 ***\`قيمة المخالفة : \` ${Number(penalty).toLocaleString()} ***
 
-***\` الانذار المستحق ؟ : \` ${warning} *** 
+***\` الانذار المستحق ؟ :\` ${warning} *** 
 
 ***\`لم تتم مخالفته بسبب :\` ${notPunished} ***
 
@@ -936,10 +936,51 @@ function formatDateYMD(dateStr){
   return `${parts[0]}/${parts[1]}/${parts[2]}`;
 }
 
+/* يحسب قيمة تاريخ الانتهاء بناءً على تاريخ البدء + المدة (أيام) ويرجّع YYYY-MM-DD */
+function calcExtRecordEndValue(startStr, days){
+  if(!startStr || !days || days <= 0) return '';
+  const parts = startStr.split('-');
+  if(parts.length !== 3) return '';
+  const y = parseInt(parts[0],10);
+  const m = parseInt(parts[1],10)-1;
+  const d = parseInt(parts[2],10);
+  if(isNaN(y) || isNaN(m) || isNaN(d)) return '';
+  const date = new Date(y, m, d);
+  date.setDate(date.getDate() + days);
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth()+1).padStart(2,'0');
+  const dd = String(date.getDate()).padStart(2,'0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+/* يحدّث حقل تاريخ الانتهاء تلقائياً لما تتغير المدة أو تاريخ البدء */
+function calcExtRecordEnd(){
+  const days = parseInt(document.getElementById('ext_rec_days').value,10);
+  const startStr = document.getElementById('ext_rec_start').value;
+  const endInput = document.getElementById('ext_rec_end');
+  const val = calcExtRecordEndValue(startStr, days);
+  endInput.value = val || '';
+}
+
+/* يملأ تاريخ اليوم تلقائياً عند أول تركيز على حقل تاريخ */
+function autoTodayOnFocus(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('focus', ()=>{
+    if(el.value) return;
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth()+1).padStart(2,'0');
+    const dd = String(now.getDate()).padStart(2,'0');
+    el.value = `${yyyy}-${mm}-${dd}`;
+  });
+}
+
 function ext_generate(){
   const mode = document.getElementById('ext_mode').value;
   const personType = document.getElementById('ext_personType').value;
   const headerText = (personType === 'مشرف') ? 'المشرف المحترم' : 'الفني المحترم';
+  const roleWord = (personType === 'مشرف') ? 'المشرف' : 'الفني';
   const copyId = (document.getElementById('ext_copyId').value || '').trim();
 
   if(!copyId){
@@ -988,32 +1029,41 @@ function ext_generate(){
   if(mode === 'record_leave'){
     const days = parseInt(document.getElementById('ext_rec_days').value,10);
     const start = document.getElementById('ext_rec_start').value;
-    const end = document.getElementById('ext_rec_end').value;
     const link = (document.getElementById('ext_rec_link').value || '').trim();
 
     if(!days || days <= 0){
       alert("⚠️ يرجى إدخال مدة الاجازة بشكل صحيح"); return;
     }
-    if(!start || !end){
-      alert("⚠️ يرجى إدخال تاريخ بدء وتاريخ انتهاء الاجازة"); return;
+    if(!start){
+      alert("⚠️ يرجى إدخال تاريخ بدء الاجازة"); return;
     }
     if(!link){
       alert("⚠️ يرجى إدخال رابط الاجازة"); return;
     }
 
+    // حساب تاريخ الانتهاء تلقائياً
+    const endStr = calcExtRecordEndValue(start, days);
+    if(!endStr){
+      alert("⚠️ تعذر حساب تاريخ انتهاء الاجازة، تأكد من صحة تاريخ البدء والمدة"); 
+      return;
+    }
+    // تحديث الحقل حتى يشوفه المستخدم
+    const endInput = document.getElementById('ext_rec_end');
+    endInput.value = endStr;
+
     const startText = formatDateYMD(start);
-    const endText = formatDateYMD(end);
+    const endText = formatDateYMD(endStr);
 
     const result =
 `***\`نموذج الاجازة الخارجية \`***
 
-***\`اسم الفني  :\`***  <@${copyId}>
+***\`اسم ${roleWord}  :\`***  <@${copyId}>
 
 ***\`مدة الاجازة : \`*** ${days} يوم
 
 ***\`تاريخ بدء الاجازة :\`*** ${startText}
 
-***\`تاريخ انتهاء الاجازة  : \`*** ${endText}
+***\`تاريخ انتهاء الاجازة  :\`*** ${endText}
 
 ***\`نسخة للقرار :\`*** ${link}
 
@@ -1041,7 +1091,7 @@ function ext_generate(){
     const result =
 `***\`نموذج كسر / رجوع من الاجازة الخارجية \`***
 
-***\`اسم الفني  :\`***  <@${copyId}> 
+***\`اسم ${roleWord}  :\`***  <@${copyId}> 
 
 ***\`تاريخ كسر/رجوع من الاجازة :\`*** ${breakText}
 
@@ -1160,9 +1210,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
   populateOptions('abs_panel');
   show('vacBox');
   ext_toggleMode();
+
+  // ربط حساب تاريخ الانتهاء عند تغيير المدة أو تاريخ البدء
+  const recDaysInput = document.getElementById('ext_rec_days');
+  const recStartInput = document.getElementById('ext_rec_start');
+  if(recDaysInput) recDaysInput.addEventListener('input', calcExtRecordEnd);
+  if(recStartInput) recStartInput.addEventListener('change', calcExtRecordEnd);
+
+  // تعبئة تاريخ اليوم تلقائياً عند الضغط على حقول التاريخ
+  autoTodayOnFocus('ext_rec_start');
+  autoTodayOnFocus('ext_break_date');
 });
 </script>
 
 </body>
 </html>
-
