@@ -114,7 +114,6 @@
   <button onclick="show('absBox')">فني لم يحضر</button>
   <button onclick="show('extBox')">إجازة خارجية</button>
   <button onclick="show('roleBox')">طلب رول</button>
-  <button onclick="show('vacBox')">نماذج التكتات</button>
 </div>
 
 <!-- ================= VACATION (إجازات فقط) ================= -->
@@ -1127,7 +1126,7 @@ function role_generate(){
   const result =
 `***السلام عليكم ورحمة الله وبركاته ,,***
 
-***\`القيادة الموقرة نطلب منكم للفني : \` <@${copyId}> ***
+***\`القيادة الموقرة نطلب منكم للفني : \` ( <@${copyId}> ) ***
 
  ***نوع الطلب : ( ${types} ) ***
 
@@ -1226,5 +1225,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 </body>
 </html>
+
 
 
